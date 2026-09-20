@@ -1,3 +1,4 @@
+import Banner from "@/component/Banner";
 import FeaturedProducts from "@/components/featured-products";
 import FlashSaleSection from "@/components/featured-products/FlashSaleSection";
 import NewArrivalsSection from "@/components/featured-products/NewArrivalsSection";
@@ -7,6 +8,7 @@ export default function Home() {
   return (
      <main className="min-h-screen bg-background">
       {/* 1. Main Featured Products (Recommended bad diye shudhu Featured) */}
+      <Banner />
       <FeaturedProducts
         badge="HANDPICKED"
         title="Featured products"
