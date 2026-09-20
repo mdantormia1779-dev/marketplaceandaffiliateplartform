@@ -4,6 +4,7 @@ import FlashSaleSection from "@/components/featured-products/FlashSaleSection";
 import NewArrivalsSection from "@/components/featured-products/NewArrivalsSection";
 import Features from "./components/Features";
 import FeaturedSuppliers from "./components/FeaturedSuppliers";
+import PricePlan from "@/component/PricePlan";
 
 
 
@@ -44,6 +45,7 @@ export default function Home() {
       />
       <FeaturedSuppliers></FeaturedSuppliers>
       <NewArrivalsSection/>
+      <PricePlan />
     </main>
   );
 }
