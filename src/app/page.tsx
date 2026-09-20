@@ -2,6 +2,10 @@ import Banner from "@/component/Banner";
 import FeaturedProducts from "@/components/featured-products";
 import FlashSaleSection from "@/components/featured-products/FlashSaleSection";
 import NewArrivalsSection from "@/components/featured-products/NewArrivalsSection";
+import Features from "./components/Features";
+import FeaturedSuppliers from "./components/FeaturedSuppliers";
+
+
 
 
 export default function Home() {
@@ -9,6 +13,7 @@ export default function Home() {
      <main className="min-h-screen bg-background">
       {/* 1. Main Featured Products (Recommended bad diye shudhu Featured) */}
       <Banner />
+      <Features></Features>
       <FeaturedProducts
         badge="HANDPICKED"
         title="Featured products"
@@ -37,6 +42,7 @@ export default function Home() {
         browseMoreHref="/products?category=cosmetics"
         showBottomBanner={true}
       />
+      <FeaturedSuppliers></FeaturedSuppliers>
       <NewArrivalsSection/>
     </main>
   );
