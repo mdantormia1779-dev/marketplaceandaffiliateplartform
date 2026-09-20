@@ -17,7 +17,7 @@ const Banner = memo(() => {
       {/* Background decoration */}
       <div className="pointer-events-none absolute -bottom-40 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-emerald-100/50 blur-3xl" />
 
-      <div className="relative mx-auto max-w-[1440px] px-6 py-12 sm:px-8 lg:px-12 xl:px-16">
+      <div className="relative mx-auto max-w-7xl px-6 py-12 sm:px-8 lg:px-12 xl:px-16">
         <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr] lg:gap-8">
           
           {/* ================= LEFT CONTENT ================= */}
