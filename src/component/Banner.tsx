@@ -9,6 +9,7 @@ import {
   Truck,
 } from "lucide-react";
 import Image from "next/image";
+import BannerImage from "../images/banner-products.jpg";
 
 const Banner = memo(() => {
   return (
@@ -147,7 +148,7 @@ const Banner = memo(() => {
                 <Image
                 width={570}
                 height={600}
-                  src="/banner-products.jpg"
+                  src={BannerImage}
                   alt="Marketplace products"
                   className="
                     h-[430px] w-full object-cover
