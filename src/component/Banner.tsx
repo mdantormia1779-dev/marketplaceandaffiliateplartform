@@ -47,7 +47,7 @@ const Banner = memo(() => {
               to shop,
               <br />
 
-              sell & earn
+              sell & earn.
             </h1>
 
             {/* Description */}
