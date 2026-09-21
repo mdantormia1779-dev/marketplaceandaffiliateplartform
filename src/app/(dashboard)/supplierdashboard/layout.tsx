@@ -1,6 +1,7 @@
 // src/app/(dashboard)/supplierdashboard/layout.tsx
 import React from "react";
 import Sidebar from "./components/Sidebar";
+import { ProductsProvider } from "./lib/products-store";
 
 export default function SupplierDashboardLayout({
   children,
@@ -11,7 +12,9 @@ export default function SupplierDashboardLayout({
     <div className="min-h-screen bg-[#f8fafc] flex">
       <Sidebar />
       <main className="flex-1 pl-64 min-w-0 min-h-screen">
+        <ProductsProvider>
         {children}
+        </ProductsProvider>
       </main>
     </div>
   );
