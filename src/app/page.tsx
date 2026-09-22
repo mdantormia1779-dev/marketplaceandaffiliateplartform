@@ -1,10 +1,10 @@
-import Banner from "@/component/Banner";
+import Banner from "@/HomeComponent/Banner";
 import FeaturedProducts from "@/components/featured-products";
 import FlashSaleSection from "@/components/featured-products/FlashSaleSection";
 import NewArrivalsSection from "@/components/featured-products/NewArrivalsSection";
 import Features from "./components/Features";
 import FeaturedSuppliers from "./components/FeaturedSuppliers";
-import PricePlan from "@/component/PricePlan";
+import PricePlan from "@/HomeComponent/PricePlan";
 
 
 
