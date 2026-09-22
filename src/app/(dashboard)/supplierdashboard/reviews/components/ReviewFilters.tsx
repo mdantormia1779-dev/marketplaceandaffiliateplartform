@@ -1,4 +1,4 @@
-import { Search, SlidersHorizontal, Star, Flag } from "lucide-react";
+import { Search, SlidersHorizontal, Star, Flag, EyeOff } from "lucide-react";
 import { ActiveFilter, ProductFilterValue, SortOption, STAR_FILTERS } from "../types";
 import { ProductFilter } from "./ProductFilter";
 
@@ -14,6 +14,7 @@ export function ReviewFilters({
   onSortChange,
   unansweredCount,
   flaggedCount,
+  hiddenCount,
 }: {
   activeFilter: ActiveFilter;
   onFilterChange: (v: ActiveFilter) => void;
@@ -26,17 +27,22 @@ export function ReviewFilters({
   onSortChange: (v: SortOption) => void;
   unansweredCount: number;
   flaggedCount: number;
+  hiddenCount: number;
 }) {
-  const pill = (isActive: boolean, tone: "indigo" | "emerald" | "rose" = "indigo") =>
+  const pill = (isActive: boolean, tone: "indigo" | "emerald" | "rose" | "amber" = "indigo") =>
     `rounded-full px-3 py-1.5 text-xs font-medium transition ${
       isActive
         ? tone === "rose"
           ? "bg-rose-600 text-white"
+          : tone === "amber"
+          ? "bg-amber-500 text-white"
           : "bg-indigo-600 text-white"
         : tone === "emerald"
         ? "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
         : tone === "rose"
         ? "bg-rose-50 text-rose-700 hover:bg-rose-100"
+        : tone === "amber"
+        ? "bg-amber-50 text-amber-700 hover:bg-amber-100"
         : "bg-slate-100 text-slate-600 hover:bg-slate-200"
     }`;
 
@@ -74,6 +80,15 @@ export function ReviewFilters({
             className={`flex items-center gap-1 ${pill(activeFilter === "flagged", "rose")}`}
           >
             <Flag size={11} /> Flagged ({flaggedCount})
+          </button>
+        )}
+
+        {hiddenCount > 0 && (
+          <button
+            onClick={() => onFilterChange("hidden")}
+            className={`flex items-center gap-1 ${pill(activeFilter === "hidden", "amber")}`}
+          >
+            <EyeOff size={11} /> Hidden ({hiddenCount})
           </button>
         )}
       </div>

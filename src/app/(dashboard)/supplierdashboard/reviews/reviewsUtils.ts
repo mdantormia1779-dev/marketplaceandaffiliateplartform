@@ -1,31 +1,42 @@
 import { ActiveFilter, ProductFilterValue, Review, SortOption, STAR_FILTERS } from "./types";
 
+function visibleOnly(reviews: Review[]): Review[] {
+  return reviews.filter((r) => !r.hidden);
+}
+
 export function getAverageRating(reviews: Review[]): string {
-  if (!reviews.length) return "0.0";
-  const sum = reviews.reduce((acc, r) => acc + r.rating, 0);
-  return (sum / reviews.length).toFixed(1);
+  const visible = visibleOnly(reviews);
+  if (!visible.length) return "0.0";
+  const sum = visible.reduce((acc, r) => acc + r.rating, 0);
+  return (sum / visible.length).toFixed(1);
 }
 
 export function getRatingBreakdown(reviews: Review[]) {
-  const total = reviews.length;
+  const visible = visibleOnly(reviews);
+  const total = visible.length;
   return STAR_FILTERS.map((star) => {
-    const count = reviews.filter((r) => r.rating === star).length;
+    const count = visible.filter((r) => r.rating === star).length;
     return { star, count, pct: total ? Math.round((count / total) * 100) : 0 };
   });
 }
 
 export function getUnansweredCount(reviews: Review[]): number {
-  return reviews.filter((r) => !r.reply).length;
+  return visibleOnly(reviews).filter((r) => !r.reply).length;
 }
 
 export function getFlaggedCount(reviews: Review[]): number {
   return reviews.filter((r) => r.flagged).length;
 }
 
+export function getHiddenCount(reviews: Review[]): number {
+  return reviews.filter((r) => r.hidden).length;
+}
+
 export function getResponseRate(reviews: Review[]): number {
-  if (!reviews.length) return 0;
-  const unanswered = getUnansweredCount(reviews);
-  return Math.round(((reviews.length - unanswered) / reviews.length) * 100);
+  const visible = visibleOnly(reviews);
+  if (!visible.length) return 0;
+  const unanswered = visible.filter((r) => !r.reply).length;
+  return Math.round(((visible.length - unanswered) / visible.length) * 100);
 }
 
 export function getUniqueProducts(reviews: Review[]): string[] {
@@ -41,12 +52,18 @@ export function filterAndSortReviews(
 ): Review[] {
   let list = [...reviews];
 
-  if (activeFilter === "unanswered") {
-    list = list.filter((r) => !r.reply);
-  } else if (activeFilter === "flagged") {
-    list = list.filter((r) => r.flagged);
-  } else if (activeFilter !== "all") {
-    list = list.filter((r) => r.rating === activeFilter);
+  if (activeFilter === "hidden") {
+    list = list.filter((r) => r.hidden);
+  } else {
+    list = list.filter((r) => !r.hidden);
+
+    if (activeFilter === "unanswered") {
+      list = list.filter((r) => !r.reply);
+    } else if (activeFilter === "flagged") {
+      list = list.filter((r) => r.flagged);
+    } else if (activeFilter !== "all") {
+      list = list.filter((r) => r.rating === activeFilter);
+    }
   }
 
   if (productFilter !== "all") {

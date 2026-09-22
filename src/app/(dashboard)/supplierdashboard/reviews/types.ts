@@ -1,23 +1,31 @@
+export const PAGE_SIZE = 5;
+
+export type StarFilter = 1 | 2 | 3 | 4 | 5;
+export const STAR_FILTERS: StarFilter[] = [5, 4, 3, 2, 1];
+
+export type ActiveFilter = "all" | StarFilter | "unanswered" | "flagged" | "hidden";
+
+export type ProductFilterValue = "all" | string;
+
+export type SortOption = "newest" | "oldest" | "highest" | "lowest";
+
+export type ReviewReplyData = {
+  text: string;
+  date: string; // ISO
+  edited?: boolean;
+};
+
 export type Review = {
   id: string;
   customerName: string;
   initials: string;
-  rating: 1 | 2 | 3 | 4 | 5;
+  rating: number;
   productName: string;
-  productImage?: string;
   comment: string;
   images?: string[];
   date: string; // ISO
-  verified: boolean;
+  verified?: boolean;
   flagged?: boolean;
-  reply?: { text: string; date: string; edited?: boolean };
+  hidden?: boolean;
+  reply?: ReviewReplyData;
 };
-
-export type StarFilter = 5 | 4 | 3 | 2 | 1;
-export type ActiveFilter = StarFilter | "all" | "unanswered" | "flagged";
-export type SortOption = "newest" | "oldest" | "highest" | "lowest";
-export type ProductFilterValue = string | "all";
-
-export const STAR_FILTERS: StarFilter[] = [5, 4, 3, 2, 1];
-
-export const PAGE_SIZE = 5;

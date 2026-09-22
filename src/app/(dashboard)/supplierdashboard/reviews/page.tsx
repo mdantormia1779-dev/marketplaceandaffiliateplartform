@@ -16,6 +16,7 @@ import {
   filterAndSortReviews,
   getAverageRating,
   getFlaggedCount,
+  getHiddenCount,
   getRatingBreakdown,
   getResponseRate,
   getTotalPages,
@@ -46,6 +47,7 @@ export default function ReviewsPage() {
   const breakdown = useMemo(() => getRatingBreakdown(reviews), [reviews]);
   const unansweredCount = useMemo(() => getUnansweredCount(reviews), [reviews]);
   const flaggedCount = useMemo(() => getFlaggedCount(reviews), [reviews]);
+  const hiddenCount = useMemo(() => getHiddenCount(reviews), [reviews]);
   const responseRate = useMemo(() => getResponseRate(reviews), [reviews]);
   const products = useMemo(() => getUniqueProducts(reviews), [reviews]);
 
@@ -57,7 +59,6 @@ export default function ReviewsPage() {
   const totalPages = getTotalPages(filtered.length, PAGE_SIZE);
   const paged = useMemo(() => paginate(filtered, page, PAGE_SIZE), [filtered, page]);
 
-  // Reset to page 1 whenever filters change so the user isn't stuck on an empty page
   useEffect(() => {
     setPage(1);
   }, [activeFilter, productFilter, query, sort]);
@@ -95,6 +96,12 @@ export default function ReviewsPage() {
     toast.success(formMode === "edit" ? "Reply updated" : "Reply posted");
   };
 
+  const handleDeleteReply = (id: string) => {
+    setReviews((prev) => prev.map((r) => (r.id === id ? { ...r, reply: undefined } : r)));
+    setOpenFormId(null);
+    toast.info("Reply deleted");
+  };
+
   const handleToggleFlag = (id: string) => {
     let nowFlagged = false;
     setReviews((prev) =>
@@ -111,6 +118,22 @@ export default function ReviewsPage() {
     }
   };
 
+  const handleToggleHide = (id: string) => {
+    let nowHidden = false;
+    setReviews((prev) =>
+      prev.map((r) => {
+        if (r.id !== id) return r;
+        nowHidden = !r.hidden;
+        return { ...r, hidden: nowHidden };
+      })
+    );
+    if (nowHidden) {
+      toast.info("Review hidden from storefront");
+    } else {
+      toast.success("Review visible on storefront again");
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 px-4 py-6 sm:px-8">
       <div className="mx-auto max-w-7xl">
@@ -122,7 +145,7 @@ export default function ReviewsPage() {
         </div>
 
         <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <OverallRatingCard average={average} total={reviews.length} />
+          <OverallRatingCard average={average} total={reviews.length - hiddenCount} />
           <RatingBreakdownCard breakdown={breakdown} onSelectStar={setActiveFilter} />
           <ResponseRateCard responseRate={responseRate} unansweredCount={unansweredCount} />
         </div>
@@ -139,6 +162,7 @@ export default function ReviewsPage() {
           onSortChange={setSort}
           unansweredCount={unansweredCount}
           flaggedCount={flaggedCount}
+          hiddenCount={hiddenCount}
         />
 
         <ReviewList
@@ -149,7 +173,9 @@ export default function ReviewsPage() {
           onOpenEditReply={handleOpenEditReply}
           onCancelForm={handleCancelForm}
           onSubmitReply={handleSubmitReply}
+          onDeleteReply={handleDeleteReply}
           onToggleFlag={handleToggleFlag}
+          onToggleHide={handleToggleHide}
         />
 
         <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />

@@ -9,7 +9,9 @@ export function ReviewList({
   onOpenEditReply,
   onCancelForm,
   onSubmitReply,
+  onDeleteReply,
   onToggleFlag,
+  onToggleHide,
 }: {
   reviews: Review[];
   openFormId: string | null;
@@ -18,7 +20,9 @@ export function ReviewList({
   onOpenEditReply: (id: string) => void;
   onCancelForm: () => void;
   onSubmitReply: (id: string, text: string) => void;
+  onDeleteReply: (id: string) => void;
   onToggleFlag: (id: string) => void;
+  onToggleHide: (id: string) => void;
 }) {
   if (!reviews.length) {
     return (
@@ -40,7 +44,9 @@ export function ReviewList({
           onOpenEditReply={() => onOpenEditReply(review.id)}
           onCancelForm={onCancelForm}
           onSubmitReply={(text) => onSubmitReply(review.id, text)}
+          onDeleteReply={() => onDeleteReply(review.id)}
           onToggleFlag={() => onToggleFlag(review.id)}
+          onToggleHide={() => onToggleHide(review.id)}
         />
       ))}
     </div>

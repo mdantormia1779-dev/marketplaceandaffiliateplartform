@@ -5,6 +5,8 @@ import { ReviewImages } from "./ReviewImages";
 import { ReviewReply } from "./ReviewReply";
 import { ReplyForm } from "./ReplyForm";
 import { ReviewFlagButton } from "./ReviewFlagButton";
+import { ReviewVisibilityButton } from "./ReviewVisibilityButton";
+import { HiddenReviewBanner } from "./HiddenReviewBanner";
 
 export function ReviewCard({
   review,
@@ -14,7 +16,9 @@ export function ReviewCard({
   onOpenEditReply,
   onCancelForm,
   onSubmitReply,
+  onDeleteReply,
   onToggleFlag,
+  onToggleHide,
 }: {
   review: Review;
   isFormOpen: boolean;
@@ -23,14 +27,22 @@ export function ReviewCard({
   onOpenEditReply: () => void;
   onCancelForm: () => void;
   onSubmitReply: (text: string) => void;
+  onDeleteReply: () => void;
   onToggleFlag: () => void;
+  onToggleHide: () => void;
 }) {
   return (
     <div
       className={`rounded-xl border bg-white p-4 shadow-sm sm:p-5 ${
-        review.flagged ? "border-rose-200" : "border-slate-100"
+        review.flagged
+          ? "border-rose-200"
+          : review.hidden
+          ? "border-dashed border-amber-300"
+          : "border-slate-100"
       }`}
     >
+      {review.hidden && <HiddenReviewBanner onUnhide={onToggleHide} />}
+
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-start gap-3">
           <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700">
@@ -62,6 +74,7 @@ export function ReviewCard({
           <span className="whitespace-nowrap rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-500">
             {review.productName}
           </span>
+          <ReviewVisibilityButton hidden={!!review.hidden} onToggle={onToggleHide} />
           <ReviewFlagButton flagged={!!review.flagged} onToggle={onToggleFlag} />
         </div>
       </div>
@@ -76,6 +89,7 @@ export function ReviewCard({
           date={review.reply.date}
           edited={review.reply.edited}
           onEdit={onOpenEditReply}
+          onDelete={onDeleteReply}
         />
       )}
 
