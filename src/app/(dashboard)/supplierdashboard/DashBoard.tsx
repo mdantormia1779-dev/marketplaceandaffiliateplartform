@@ -5,7 +5,6 @@ import { Search, Bell, MessageSquare, ChevronDown, X } from 'lucide-react';
 import StoreBanner from './components/StoreBanner';
 import AnalyticsOverview from './components/AnalyticsOverview';
 
-
 const DashBoard = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [notifications, setNotifications] = useState(3);
@@ -14,7 +13,6 @@ const DashBoard = () => {
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-800 font-sans p-4 sm:p-6 lg:p-8 space-y-6">
-      
       {/* Header */}
       <header className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 relative z-20">
         <div>
@@ -29,10 +27,10 @@ const DashBoard = () => {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
             <input 
               type="text" 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              value={searchQuery} 
+              onChange={(e) => setSearchQuery(e.target.value)} 
               placeholder="Search products, orders, customers..." 
-              className="w-full pl-9 pr-8 py-2 bg-slate-100/80 border border-slate-200/80 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition"
+              className="w-full pl-9 pr-8 py-2 bg-slate-100/80 border border-slate-200/80 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition" 
             />
             {searchQuery && (
               <button onClick={() => setSearchQuery('')} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
@@ -43,7 +41,7 @@ const DashBoard = () => {
 
           <div className="relative">
             <button 
-              onClick={() => { setShowNotifications(!showNotifications); setUserProfileOpen(false); }}
+              onClick={() => { setShowNotifications(!showNotifications); setUserProfileOpen(false); }} 
               className="relative p-2 bg-slate-100/80 border border-slate-200/80 rounded-lg hover:bg-slate-200/60 transition text-slate-600"
             >
               <Bell className="w-4 h-4" />
@@ -81,7 +79,7 @@ const DashBoard = () => {
 
           <div className="relative">
             <div 
-              onClick={() => { setUserProfileOpen(!userProfileOpen); setShowNotifications(false); }}
+              onClick={() => { setUserProfileOpen(!userProfileOpen); setShowNotifications(false); }} 
               className="flex items-center gap-2.5 pl-2 border-l border-slate-200 cursor-pointer select-none"
             >
               <div className="w-9 h-9 rounded-full bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
@@ -107,11 +105,10 @@ const DashBoard = () => {
       </header>
 
       {/* Store Banner */}
-      <StoreBanner></StoreBanner>
+      <StoreBanner />
 
       {/* Analytics overview & cards */}
-      <AnalyticsOverview></AnalyticsOverview>
-
+      <AnalyticsOverview />
     </div>
   );
 };
