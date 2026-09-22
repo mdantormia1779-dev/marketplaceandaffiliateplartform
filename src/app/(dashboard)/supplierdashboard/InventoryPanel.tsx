@@ -2,7 +2,7 @@
 
 import React, { useMemo, useState } from 'react';
 import Image from 'next/image';
-import { Product } from './DashBoard';
+import { Product } from '@/types';
 
 /* ------------------------------------------------------------------ */
 /* Inventory Icons (Dashboard এর উপর নির্ভর না করে সরাসরি এখানে যুক্ত)   */
