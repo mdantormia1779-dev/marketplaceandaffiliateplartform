@@ -153,6 +153,16 @@ export const ScreenLogin: React.FC<ScreenLoginProps> = ({
                 selectedRole === 'supplier' ? 'bg-white text-blue-600 font-bold shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
+
+               <span>🛒 Super Admin</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setSelectedRole('affiliate')}
+              className={`py-2 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
+                selectedRole === 'affiliate' ? 'bg-white text-blue-600 font-bold shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
               <span>🏪 Supplier / Seller</span>
             </button>
           </div>

@@ -43,7 +43,7 @@ const features = [
 export default function Features() {
   return (
     <section className="w-full border-y border-[#e5eaf0] bg-white">
-      <div className="mx-auto grid max-w-[1440px] grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+      <div className="mx-auto grid max-w-360 grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
         {features.map((feature, index) => {
           const Icon = feature.icon;
 
@@ -51,7 +51,7 @@ export default function Features() {
             <div
               key={feature.title}
               className={`
-                flex min-h-[142px] items-start gap-4 px-5 py-7
+                flex min-h-35.5 items-start gap-4 px-5 py-7
                 xl:px-6
                 ${
                   index !== 0
