@@ -4,9 +4,11 @@ import { RANGES } from "./data";
 interface PageHeaderProps {
   range: string;
   onRangeChange: (range: string) => void;
+  onExport: () => void;
+  onNewCode: () => void;
 }
 
-export default function PageHeader({ range, onRangeChange }: PageHeaderProps) {
+export default function PageHeader({ range, onRangeChange, onExport, onNewCode }: PageHeaderProps) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div>
@@ -38,6 +40,7 @@ export default function PageHeader({ range, onRangeChange }: PageHeaderProps) {
 
         <button
           type="button"
+          onClick={onExport}
           className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
         >
           <Download className="h-4 w-4" />
@@ -45,6 +48,7 @@ export default function PageHeader({ range, onRangeChange }: PageHeaderProps) {
         </button>
         <button
           type="button"
+          onClick={onNewCode}
           className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-3.5 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-slate-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-slate-900/30"
         >
           <Plus className="h-4 w-4" />

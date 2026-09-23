@@ -1,6 +1,11 @@
 import { Download, Plus } from "lucide-react";
 
-export default function OverviewHeader() {
+type Props = {
+  onExport: () => void;
+  onAddStockClick: () => void;
+};
+
+export default function OverviewHeader({ onExport, onAddStockClick }: Props) {
   return (
     <div className="flex flex-wrap items-end justify-between gap-4">
       <div>
@@ -12,6 +17,7 @@ export default function OverviewHeader() {
       <div className="flex items-center gap-2">
         <button
           type="button"
+          onClick={onExport}
           className="inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
         >
           <Download className="h-4 w-4" />
@@ -19,6 +25,7 @@ export default function OverviewHeader() {
         </button>
         <button
           type="button"
+          onClick={onAddStockClick}
           className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-3.5 py-2 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500/40"
         >
           <Plus className="h-4 w-4" />

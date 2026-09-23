@@ -11,6 +11,7 @@ import {
   Toolbar,
   ProductsTable,
   Pagination,
+  AddStockModal,
   PRODUCTS,
   statusOf,
   SORTS,
@@ -19,6 +20,7 @@ import {
 import type { Product, StockStatus } from "./inventorycomponent/types";
 
 export default function InventoryPage() {
+  const [addStockOpen, setAddStockOpen] = useState(false);
   const [products, setProducts] = useState<Product[]>(PRODUCTS);
   const [dismissed, setDismissed] = useState<string[]>([]);
   const [tab, setTab] = useState<"all" | StockStatus>("all");
@@ -123,13 +125,45 @@ export default function InventoryPage() {
   };
 
   const dismissAlert = (id: string) => setDismissed((prev) => [...prev, id]);
+  const handleAddStock = (id: string, qty: number) =>
+  setProducts((prev) =>
+    prev.map((p) => (p.id === id ? { ...p, onHand: p.onHand + qty } : p))
+  );
+
+const exportToCSV = () => {
+  const headers = [
+    "ID", "Name", "SKU", "Category", "Warehouse", "On Hand", "Reserved",
+    "Incoming", "Alert At", "Capacity", "Velocity", "Unit Cost",
+    "Restocked At", "Cover Days", "Suggested", "Status",
+  ];
+  const rows = products.map((p) => [
+    p.id, p.name, p.sku, p.category, p.warehouse, p.onHand, p.reserved,
+    p.incoming, p.alertAt, p.capacity, p.velocity, p.unitCost,
+    p.restockedAt, p.coverDays ?? "", p.suggested, statusOf(p),
+  ]);
+
+  const csvContent = [headers, ...rows]
+    .map((row) => row.map((cell) => `"${String(cell).replace(/"/g, '""')}"`).join(","))
+    .join("\n");
+
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  const date = new Date().toISOString().slice(0, 10);
+  link.href = url;
+  link.setAttribute("download", `inventory-export-${date}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
 
   return (
     <div className="min-h-screen bg-slate-50/70 text-slate-900">
       <TopHeader alertCount={counts.out + counts.low} />
 
       <main className="mx-auto max-w-[1400px] space-y-6 p-6">
-        <OverviewHeader />
+       <OverviewHeader onExport={exportToCSV} onAddStockClick={() => setAddStockOpen(true)} />
 
         <StatsGrid
           totalSkus={products.length}
@@ -188,6 +222,13 @@ export default function InventoryPage() {
           onPageChange={setPage}
         />
       </main>
+       <AddStockModal
+        open={addStockOpen}
+        products={products}
+        onClose={() => setAddStockOpen(false)}
+        onSubmit={handleAddStock}
+      />
+      
     </div>
   );
 }

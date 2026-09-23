@@ -1,4 +1,5 @@
-import { MoreVertical, Pause, Play } from "lucide-react";
+import { Pause, Play, Trash2 } from "lucide-react";
+import ActionsMenu from "./ActionsMenu";
 import StatusBadge from "./StatusBadge";
 import type { Affiliate } from "./data";
 
@@ -21,7 +22,13 @@ function conversionRate(a: Affiliate) {
   return `${((a.orders / a.clicks) * 100).toFixed(1)}%`;
 }
 
-export default function AffiliateTable({ affiliates }: { affiliates: Affiliate[] }) {
+interface AffiliateTableProps {
+  affiliates: Affiliate[];
+  onTogglePause: (id: string) => void;
+  onDelete: (id: string) => void;
+}
+
+export default function AffiliateTable({ affiliates, onTogglePause, onDelete }: AffiliateTableProps) {
   return (
     <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="overflow-x-auto">
@@ -88,6 +95,7 @@ export default function AffiliateTable({ affiliates }: { affiliates: Affiliate[]
                   <div className="flex items-center justify-end gap-1">
                     <button
                       type="button"
+                      onClick={() => onTogglePause(a.id)}
                       className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
                     >
                       {a.status === "paused" ? (
@@ -97,13 +105,17 @@ export default function AffiliateTable({ affiliates }: { affiliates: Affiliate[]
                       )}
                       {a.status === "paused" ? "Resume" : "Pause"}
                     </button>
-                    <button
-                      type="button"
-                      className="rounded-md p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
-                      aria-label={`More actions for ${a.name}`}
-                    >
-                      <MoreVertical className="h-4 w-4" />
-                    </button>
+                    <ActionsMenu
+                      ariaLabel={`More actions for ${a.name}`}
+                      items={[
+                        {
+                          label: "Delete",
+                          icon: <Trash2 className="h-3.5 w-3.5" />,
+                          danger: true,
+                          onClick: () => onDelete(a.id),
+                        },
+                      ]}
+                    />
                   </div>
                 </td>
               </tr>

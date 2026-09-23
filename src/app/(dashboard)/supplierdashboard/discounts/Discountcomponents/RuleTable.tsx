@@ -1,11 +1,18 @@
-import { MoreVertical, Pencil, Zap } from "lucide-react";
+import { Pencil, Zap } from "lucide-react";
 import StatusPill from "./StatusBadge";
 import ChannelChips from "./ChannelChips";
+import RowActionsMenu from "./RowActionsMenu";
 import { KIND_META } from "./discountKind";
 import type { Rule } from "./data";
 import { formatDate, money, scheduleNote } from "./lib";
 
-export default function RuleTable({ rules }: { rules: Rule[] }) {
+interface RuleTableProps {
+  rules: Rule[];
+  onEdit: (rule: Rule) => void;
+  onDeleteRequest: (rule: Rule) => void;
+}
+
+export default function RuleTable({ rules, onEdit, onDeleteRequest }: RuleTableProps) {
   return (
     <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="overflow-x-auto">
@@ -115,18 +122,17 @@ export default function RuleTable({ rules }: { rules: Rule[] }) {
                     <div className="flex items-center justify-end gap-1">
                       <button
                         type="button"
+                        onClick={() => onEdit(r)}
                         className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
                       >
                         <Pencil className="h-3.5 w-3.5" />
                         Edit
                       </button>
-                      <button
-                        type="button"
-                        className="rounded-md p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
-                        aria-label={`More actions for ${r.name}`}
-                      >
-                        <MoreVertical className="h-4 w-4" />
-                      </button>
+                      <RowActionsMenu
+                        label={r.name}
+                        onEdit={() => onEdit(r)}
+                        onDelete={() => onDeleteRequest(r)}
+                      />
                     </div>
                   </td>
                 </tr>
