@@ -1,31 +1,32 @@
-// src/app/(dashboard)/supplierdashboard/settings/page.tsx
 "use client";
 
-
-import ComingSoonBox from "../../components/ComingSoonBox";
 import Navbar from "../../components/Navbar";
+import SettingsPanel from "../../components/SettingsPanel";
 
 
 export default function SettingsPage() {
   return (
     <div className="min-h-screen bg-[#f8fafc] flex flex-col">
-      {/* Top Fixed Navbar */}
-      <div className="sticky top-0 z-50 bg-white border-b border-slate-100">
-        <Navbar/>
+      {/* Top Navbar */}
+      <div className="sticky top-0 z-50 border-b border-slate-100 bg-white">
+        <Navbar />
       </div>
 
-      {/* Main Container */}
-      <main className="flex-1 flex flex-col p-6 max-w-[1600px] w-full mx-auto">
-        {/* Header Title as shown in screenshot */}
-        <div className="mb-2">
-          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">Settings</h1>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Store profile, payments, shipping and preferences.
+      {/* Main */}
+      <main className="flex-1 w-full max-w-300 mx-auto px-5 py-7 md:px-8">
+        {/* Page Header */}
+        <div className="mb-7">
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
+            Settings
+          </h1>
+
+          <p className="mt-1 text-sm text-slate-500">
+            Manage your supplier profile and account security.
           </p>
         </div>
 
-        {/* Coming Soon Component */}
-        <ComingSoonBox/>
+        {/* Settings */}
+        <SettingsPanel/>
       </main>
     </div>
   );

@@ -171,7 +171,7 @@ export default function WithdrawForm({
                   </div>
                 </div>
                 <div className={`w-5 h-5 rounded-full flex items-center justify-center ${isSelected ? "bg-indigo-600 text-white" : "border border-slate-300"}`}>
-                  {isSelected && <Check className="w-3.5 h-3.5 stroke-[3]" />}
+                  {isSelected && <Check className="w-3.5 h-3.5 stroke-3" />}
                 </div>
               </div>
             );
