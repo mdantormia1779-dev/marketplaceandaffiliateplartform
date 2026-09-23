@@ -13,11 +13,11 @@ export interface ProductSectionProps {
   showBottomBanner?: boolean;
 }
 
-// 🎯 স্ক্রিনশটের হুবহু ৫টি প্রোডাক্টের ইমেজ
+
 const defaultProducts: Product[] = [
   {
     id: "1",
-    // 👉 স্ক্রিনশটের হুবহু সেই ব্ল্যাক ওভার-ইয়ার হেডফোনের ছবি
+
     image:
       "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=600&q=80",
     vendor: "AudioTech BD",

@@ -45,36 +45,41 @@ export default function ProductTabsSection({
   return (
     <div className="w-full rounded-2xl border border-gray-100 bg-white shadow-xs font-sans">
       {/* Top Tab Headers */}
-      <div className="flex flex-wrap items-center gap-2 border-b border-gray-100 px-6 pt-4">
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
+      {/* Top Tab Headers */}
+<div className="scrollbar-hide flex items-center gap-6 overflow-x-auto border-b border-gray-100 px-6">
+  {tabs.map((tab) => {
+    const Icon = tab.icon;
+    const isActive = activeTab === tab.id;
 
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`relative flex items-center gap-2 pb-4 pt-1 text-xs sm:text-sm font-medium transition-colors ${
-                isActive
-                  ? "text-blue-600 font-semibold"
-                  : "text-gray-500 hover:text-gray-800"
-              }`}
-            >
-              <Icon className={`h-4 w-4 ${isActive ? "text-blue-600" : "text-gray-400"}`} />
-              <span>{tab.label}</span>
-              {tab.count !== undefined && (
-                <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-600">
-                  {tab.count}
-                </span>
-              )}
-              {/* Active Underline Indicator */}
-              {isActive && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-blue-600" />
-              )}
-            </button>
-          );
-        })}
-      </div>
+    return (
+      <button
+        key={tab.id}
+        onClick={() => setActiveTab(tab.id)}
+        className={`relative flex shrink-0 items-center gap-2 py-4 text-xs sm:text-sm font-medium transition-colors ${
+          isActive
+            ? "text-blue-600 font-semibold"
+            : "text-gray-500 hover:text-gray-800"
+        }`}
+      >
+        <Icon className={`h-4 w-4 ${isActive ? "text-blue-600" : "text-gray-400"}`} />
+        <span>{tab.label}</span>
+        {tab.count !== undefined && (
+          <span
+            className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+              isActive ? "bg-blue-50 text-blue-600" : "bg-gray-100 text-gray-600"
+            }`}
+          >
+            {tab.count}
+          </span>
+        )}
+        {/* Active Underline Indicator */}
+        {isActive && (
+          <span className="absolute bottom-0 left-0 right-0 h-0.5 rounded-full bg-blue-600" />
+        )}
+      </button>
+    );
+  })}
+    </div>
 
       {/* Tab Content Body */}
       <div className="p-6 sm:p-8">

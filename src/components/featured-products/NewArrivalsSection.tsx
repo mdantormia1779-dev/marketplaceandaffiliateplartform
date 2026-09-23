@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { ProductCard, type Product } from "./product-card";
 
-// 🎯 স্ক্রিনশটের হুবহু ৫টি নিউ অ্যারাইভাল প্রোডাক্ট (লেদার ব্যাকপ্যাক, টি-শার্ট, সিরামিক মগ, ডেস্ক ল্যাম্প, সানগ্লাস)
+
 const newArrivalProducts: Product[] = [
   {
     id: "3",
