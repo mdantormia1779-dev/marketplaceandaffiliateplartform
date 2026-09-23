@@ -1,7 +1,18 @@
-import { Info, Megaphone } from "lucide-react";
+import { Info, Megaphone, Pause, Play, Trash2 } from "lucide-react";
+import ActionsMenu from "./ActionsMenu";
 import type { Campaign } from "./data";
 
-export default function CommissionOverview({ campaigns }: { campaigns: Campaign[] }) {
+interface CommissionOverviewProps {
+  campaigns: Campaign[];
+  onToggleStatus: (id: string) => void;
+  onDelete: (id: string) => void;
+}
+
+export default function CommissionOverview({
+  campaigns,
+  onToggleStatus,
+  onDelete,
+}: CommissionOverviewProps) {
   return (
     <section className="flex flex-col rounded-xl border border-slate-200 bg-white p-5 shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div>
@@ -38,20 +49,62 @@ export default function CommissionOverview({ campaigns }: { campaigns: Campaign[
         {campaigns.map((c) => (
           <li
             key={c.id}
-            className="flex items-center justify-between rounded-lg border border-slate-200 px-3 py-2.5"
+            className="flex items-center justify-between gap-3 rounded-lg border border-slate-200 px-3 py-2.5"
           >
-            <div className="flex items-center gap-2.5">
-              <span className="grid h-8 w-8 place-items-center rounded-lg bg-teal-50 text-teal-600">
+            <div className="flex min-w-0 items-center gap-2.5">
+              <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-teal-50 text-teal-600">
                 <Megaphone className="h-4 w-4" />
               </span>
-              <div>
-                <p className="text-sm font-medium text-slate-800">{c.name}</p>
+              <div className="min-w-0">
+                <div className="flex items-center gap-2">
+                  <p className="truncate text-sm font-medium text-slate-800">{c.name}</p>
+                  <span
+                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-medium ring-1 ring-inset ${
+                      c.status === "active"
+                        ? "bg-emerald-50 text-emerald-700 ring-emerald-600/20"
+                        : "bg-amber-50 text-amber-700 ring-amber-600/20"
+                    }`}
+                  >
+                    <span
+                      className={`h-1 w-1 rounded-full ${
+                        c.status === "active" ? "bg-emerald-500" : "bg-amber-500"
+                      }`}
+                    />
+                    {c.status === "active" ? "Active" : "Paused"}
+                  </span>
+                </div>
                 <p className="text-xs text-slate-400">{c.window}</p>
               </div>
             </div>
-            <span className="rounded-full bg-teal-50 px-2.5 py-1 text-xs font-semibold text-teal-700">
-              {c.commissionRate}%
-            </span>
+
+            <div className="flex shrink-0 items-center gap-1.5">
+              <span className="rounded-full bg-teal-50 px-2.5 py-1 text-xs font-semibold text-teal-700">
+                {c.commissionRate}%
+              </span>
+              <button
+                type="button"
+                onClick={() => onToggleStatus(c.id)}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
+              >
+                {c.status === "paused" ? (
+                  <Play className="h-3.5 w-3.5" />
+                ) : (
+                  <Pause className="h-3.5 w-3.5" />
+                )}
+                {c.status === "paused" ? "Resume" : "Pause"}
+              </button>
+              <ActionsMenu
+                ariaLabel={`More actions for ${c.name}`}
+                items={[
+                  {
+                    label: "Delete",
+                    icon: <Trash2 className="h-3.5 w-3.5" />,
+                    danger: true,
+                    onClick: () => onDelete(c.id),
+                  },
+                ]}
+              />
+            </div>
           </li>
         ))}
 

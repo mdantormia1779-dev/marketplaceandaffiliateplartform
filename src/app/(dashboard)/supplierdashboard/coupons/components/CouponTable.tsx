@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
-import { Check, Copy, DollarSign, MoreVertical, Pencil, Percent, Truck } from "lucide-react";
+import { Check, Copy, DollarSign, Pencil, Percent, Truck } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 import LimitChip from "./LimitChip";
+import RowActionsMenu from "./RowActionsMenu";
 import type { Coupon, DiscountType } from "./data";
 import { discountLabel, formatDate, money, nearLimit, validityNote } from "./lib";
 
@@ -21,9 +22,17 @@ interface CouponTableProps {
   coupons: Coupon[];
   copiedId: string | null;
   onCopy: (c: Coupon) => void;
+  onEdit: (c: Coupon) => void;
+  onDeleteRequest: (c: Coupon) => void;
 }
 
-export default function CouponTable({ coupons, copiedId, onCopy }: CouponTableProps) {
+export default function CouponTable({
+  coupons,
+  copiedId,
+  onCopy,
+  onEdit,
+  onDeleteRequest,
+}: CouponTableProps) {
   return (
     <section className="overflow-hidden rounded-xl border border-slate-200 bg-white shadow-[0_1px_2px_rgba(15,23,42,0.04)]">
       <div className="overflow-x-auto">
@@ -158,18 +167,17 @@ export default function CouponTable({ coupons, copiedId, onCopy }: CouponTablePr
                     <div className="flex items-center justify-end gap-1">
                       <button
                         type="button"
+                        onClick={() => onEdit(c)}
                         className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-2.5 py-1.5 text-xs font-medium text-slate-700 shadow-sm transition hover:bg-slate-50"
                       >
                         <Pencil className="h-3.5 w-3.5" />
                         Edit
                       </button>
-                      <button
-                        type="button"
-                        className="rounded-md p-1.5 text-slate-400 transition hover:bg-slate-100 hover:text-slate-600"
-                        aria-label={`More actions for ${c.code}`}
-                      >
-                        <MoreVertical className="h-4 w-4" />
-                      </button>
+                      <RowActionsMenu
+                        label={c.code}
+                        onEdit={() => onEdit(c)}
+                        onDelete={() => onDeleteRequest(c)}
+                      />
                     </div>
                   </td>
                 </tr>

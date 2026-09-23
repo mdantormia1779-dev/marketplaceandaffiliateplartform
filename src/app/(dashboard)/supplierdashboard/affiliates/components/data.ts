@@ -16,11 +16,14 @@ export interface Affiliate {
   status: AffiliateStatus;
 }
 
+export type CampaignStatus = "active" | "paused";
+
 export interface Campaign {
   id: string;
   name: string;
   commissionRate: number; // percent, overrides product/global while running
   window: string; // display range, e.g. "Oct 5 – Oct 20"
+  status: CampaignStatus;
 }
 
 export const AFFILIATES: Affiliate[] = [
@@ -147,8 +150,8 @@ export const AFFILIATES: Affiliate[] = [
 ];
 
 export const CAMPAIGNS: Campaign[] = [
-  { id: "cp1", name: "Eid Collection Boost", commissionRate: 15, window: "Oct 5 – Oct 20" },
-  { id: "cp2", name: "Weekend Flash Push", commissionRate: 18, window: "Sep 18 – Sep 21" },
+  { id: "cp1", name: "Eid Collection Boost", commissionRate: 15, window: "Oct 5 – Oct 20", status: "active" },
+  { id: "cp2", name: "Weekend Flash Push", commissionRate: 18, window: "Sep 18 – Sep 21", status: "active" },
 ];
 
 export const PRODUCT_OPTIONS: string[] = [

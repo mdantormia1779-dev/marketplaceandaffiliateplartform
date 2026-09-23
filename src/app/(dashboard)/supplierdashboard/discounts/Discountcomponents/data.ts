@@ -229,4 +229,15 @@ export const SORTS = [
   "Ending soonest",
 ];
 
+
+// --- Added for the New Rule form ---
+export const CHANNELS = ["Online Store", "Mobile App", "Marketplace"];
+
+export const KIND_OPTIONS: Array<{ value: DiscountKind; label: string }> = [
+  { value: "percentage", label: "Percentage" },
+  { value: "fixed", label: "Fixed Amount" },
+  { value: "bundle", label: "Bundle" },
+  { value: "bxgy", label: "Buy X Get Y" },
+];
+
 export const PAGE_SIZE = 8;
