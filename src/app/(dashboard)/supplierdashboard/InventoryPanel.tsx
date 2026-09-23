@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { Product } from './DashBoard';
 
 /* ------------------------------------------------------------------ */
-/* Inventory Icons (Dashboard এর উপর নির্ভর না করে সরাসরি এখানে যুক্ত)   */
+/* Inventory Icons (Dashboard এর উপর নির্ভর না করে সরাসরি এখানে যুক্ত)   */ 
 /* ------------------------------------------------------------------ */
 const Icons = {
   ShoppingBag: (props: React.SVGProps<SVGSVGElement>) => (
