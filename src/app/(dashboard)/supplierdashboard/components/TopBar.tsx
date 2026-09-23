@@ -11,7 +11,7 @@ export default function TopBar({ title, subtitle }: { title: string; subtitle: s
       </div>
 
       <div className="flex items-center gap-5">
-        <div className="relative hidden w-[240px] md:block">
+        <div className="relative hidden w-60 md:block">
           <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
           <input
             type="text"

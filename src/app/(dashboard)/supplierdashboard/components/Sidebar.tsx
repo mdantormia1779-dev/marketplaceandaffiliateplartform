@@ -191,7 +191,7 @@ const SIDEBAR_GROUPS: MenuGroup[] = [
 
 function SidebarBadge({ value }: { value: number }) {
   return (
-    <span className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-emerald-100 px-1.5 text-[11px] font-semibold text-emerald-800">
+    <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-100 px-1.5 text-[11px] font-semibold text-emerald-800">
       {value}
     </span>
   );
@@ -258,7 +258,7 @@ export default function Sidebar() {
 
           <div className="leading-tight">
             <p className="text-base font-bold tracking-tight text-slate-900">
-              Nexora
+              Sokoni
             </p>
 
             <p className="text-xs font-medium text-slate-400">
