@@ -1,33 +1,48 @@
-// src/app/(dashboard)/supplierdashboard/subscription/upgrade/page.tsx
+// src/app/(dashboard)/supplierdashboard/account/subscription/upgrade/page.tsx
 "use client";
 
-
-import ComingSoonBox from "../../../components/ComingSoonBox";
 import Navbar from "../../../components/Navbar";
-
+import {
+  BillingToggle,
+  CompareTable,
+  ConfirmModal,
+  FaqSection,
+  PlansGrid,
+  WhyUpgrade,
+  usePlans,
+} from "./upgradecomponents/index";
 
 export default function UpgradePage() {
+  const { cycle, setCycle, current, pending, notice, requestChange, confirmChange, cancelChange } = usePlans();
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col">
-      {/* Top Fixed Navbar */}
-      <div className="sticky top-0 z-50 bg-white border-b border-slate-100">
-        <Navbar/>
+    <div className="flex min-h-screen flex-col bg-[#f8fafc]">
+      <div className="sticky top-0 z-50 border-b border-slate-100 bg-white">
+        <Navbar />
       </div>
 
-      {/* Main Container */}
-      <main className="flex-1 flex flex-col p-6 max-w-[1600px] w-full mx-auto">
-        <div className="mb-2">
-          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">Upgrade Plan</h1>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Explore advanced plans and unlock more powerful supplier features.
+      <main className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col gap-10 p-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Upgrade Plan</h1>
+          <p className="mt-1 text-sm text-slate-500">
+            Choose a plan that fits your business and unlock more products, analytics and features.
           </p>
         </div>
 
-        <ComingSoonBox
-         title="Upgrade plans are on the way"
-          subtitle="We are preparing high-tier subscription plans with advanced analytics and features. Stay tuned!"
-        />
+        {notice && (
+          <p className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{notice}</p>
+        )}
+
+        <BillingToggle cycle={cycle} onChange={setCycle} />
+        <PlansGrid cycle={cycle} current={current} onSelect={requestChange} />
+        <CompareTable current={current} />
+        <WhyUpgrade />
+        <FaqSection />
       </main>
+
+      {pending && (
+        <ConfirmModal plan={pending} cycle={cycle} current={current} onConfirm={confirmChange} onClose={cancelChange} />
+      )}
     </div>
   );
 }

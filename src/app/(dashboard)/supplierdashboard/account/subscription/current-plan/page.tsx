@@ -1,35 +1,37 @@
-// src/app/(dashboard)/supplierdashboard/subscription/current-plan/page.tsx
+// src/app/(dashboard)/supplierdashboard/account/subscription/current-plan/page.tsx
 "use client";
 
-import ComingSoonBox from "../../../components/ComingSoonBox";
 import Navbar from "../../../components/Navbar";
-
-
-
-
+import {
+  FeaturesCard,
+  PlanDetailsCard,
+  PlanHeader,
+  UsageSection,
+  usePlan,
+} from "./current-plancomponents/index";
 
 export default function CurrentPlanPage() {
+  const { plan, toggleAutoRenewal, cancel, resume } = usePlan();
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col">
-      {/* Top Fixed Navbar */}
-      <div className="sticky top-0 z-50 bg-white border-b border-slate-100">
-        <Navbar/>
+    <div className="flex min-h-screen flex-col bg-[#f8fafc]">
+      <div className="sticky top-0 z-50 border-b border-slate-100 bg-white">
+        <Navbar />
       </div>
 
-      {/* Main Container */}
-      <main className="flex-1 flex flex-col p-6 max-w-[1600px] w-full mx-auto">
-        <div className="mb-2">
-          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">Current Plan</h1>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Everything included in your current subscription.
-          </p>
+      <main className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col gap-6 p-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Current Plan</h1>
+          <p className="mt-1 text-sm text-slate-500">Everything included in your current subscription.</p>
         </div>
 
-        <ComingSoonBox
-         title="This section is on the way"
-          subtitle="We are building this part of the supplier workspace step by step. It will be ready in an upcoming phase."
-        />
-         
+        <PlanHeader plan={plan} onToggleAutoRenewal={toggleAutoRenewal} onCancel={cancel} onResume={resume} />
+        <UsageSection usage={plan.usage} />
+
+        <section className="grid gap-6 lg:grid-cols-3">
+          <FeaturesCard planName={plan.planName} features={plan.features} />
+          <PlanDetailsCard plan={plan} />
+        </section>
       </main>
     </div>
   );

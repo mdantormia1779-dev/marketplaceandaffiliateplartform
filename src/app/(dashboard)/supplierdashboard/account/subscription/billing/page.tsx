@@ -1,32 +1,37 @@
 // src/app/(dashboard)/supplierdashboard/subscription/billing/page.tsx
 "use client";
 
-import ComingSoonBox from "../../../components/ComingSoonBox";
 import Navbar from "../../../components/Navbar";
-
-
+import {
+  CurrentSubscription,
+  InvoiceHistory,
+  PaymentMethodCard,
+  StatsRow,
+  useBilling,
+} from "./billingcomponents";
 
 export default function BillingPage() {
+  const { data, toggleAutoRenewal, savePaymentMethod, removePaymentMethod } = useBilling();
+
   return (
-    <div className="min-h-screen bg-[#f8fafc] flex flex-col">
-      {/* Top Fixed Navbar */}
-      <div className="sticky top-0 z-50 bg-white border-b border-slate-100">
-        <Navbar/>
+    <div className="flex min-h-screen flex-col bg-[#f8fafc]">
+      <div className="sticky top-0 z-50 border-b border-slate-100 bg-white">
+        <Navbar />
       </div>
 
-      {/* Main Container */}
-      <main className="flex-1 flex flex-col p-6 max-w-[1600px] w-full mx-auto">
-        <div className="mb-2">
-          <h1 className="text-xl font-extrabold text-slate-900 tracking-tight">Billing & Invoices</h1>
-          <p className="text-xs text-slate-400 mt-0.5">
-            Manage your payment methods, billing history and subscription invoices.
-          </p>
+      <main className="mx-auto flex w-full max-w-[1600px] flex-1 flex-col gap-6 p-6">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Billing</h1>
+          <p className="mt-1 text-slate-500">Invoices, payment methods and billing history.</p>
         </div>
 
-        <ComingSoonBox
-        title="Billing section is on the way"
-          subtitle="We are building secure payment gateways and invoice management step by step. It will be ready soon."
-        />
+        <section className="grid gap-6 lg:grid-cols-3">
+          <CurrentSubscription subscription={data.subscription} onToggleAutoRenewal={toggleAutoRenewal} />
+          <PaymentMethodCard method={data.paymentMethod} onSave={savePaymentMethod} onRemove={removePaymentMethod} />
+        </section>
+
+        <StatsRow subscription={data.subscription} />
+        <InvoiceHistory invoices={data.invoices} />
       </main>
     </div>
   );
