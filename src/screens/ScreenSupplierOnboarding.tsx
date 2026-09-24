@@ -10,6 +10,7 @@ import {
   ArrowRight 
 } from 'lucide-react';
 import { ScreenType } from '../types';
+import { saveAuthUser } from '../lib/auth'; // path apnar structure onujayi thik korben
 
 // Imports from supplier-onboarding sub-folder
 import { OnboardingStepper } from './supplier-onboarding/OnboardingStepper';
@@ -19,18 +20,22 @@ import { SupplierVerificationStep2 } from './supplier-onboarding/SupplierVerific
 import { SupplierPayoutStep3 } from './supplier-onboarding/SupplierPayoutStep3';
 import { SupplierReviewStep4 } from './supplier-onboarding/SupplierReviewStep4';
 import { SupplierSuccessStep5 } from './supplier-onboarding/SupplierSuccessStep5';
+
 interface ScreenSupplierOnboardingProps {
   onNavigate: (screen: ScreenType) => void;
   triggerToast?: (msg: string) => void;
 }
 
-
+// Supplier dashboard ekhon real Next.js route hisebe toiri hoye gache:
+// app/(dashboard)/supplierdashboard/page.tsx
+// Route group "(dashboard)" URL-e dekha jay na, tai actual path thakbe /supplierdashboard
+const SUPPLIER_DASHBOARD_PATH = '/supplierdashboard';
 
 export const ScreenSupplierOnboarding: React.FC<ScreenSupplierOnboardingProps> = ({
   onNavigate,
   triggerToast,
 }) => {
-  // Step Navigation State (1 to 4)
+  // Step Navigation State (1 to 5)
   const [currentStep, setCurrentStep] = useState<number>(1);
 
   // Form State
@@ -180,6 +185,27 @@ export const ScreenSupplierOnboarding: React.FC<ScreenSupplierOnboardingProps> =
 
     triggerToast?.('Step 1 complete! Moving to Step 2...');
     setCurrentStep(2);
+  };
+
+  // Step 5-e successful submission howar por eta call hoy.
+  // Ekhane supplier-er auth info save kora hocche (Navbar-e dekhanor jonno)
+  // ar tarpor asol /supplierdashboard route-e pathano hocche.
+  const handleGoToDashboard = () => {
+    saveAuthUser({
+      name: formData.ownerName || 'Supplier',
+      email: formData.email,
+      role: 'supplier',
+    });
+
+    triggerToast?.('Welcome! Redirecting to your Supplier Dashboard...');
+
+    // Notun (dashboard) route group-e asol page thakay,
+    // sorasori hard navigation e sob theke nirbhorjogyo.
+    // Apnar project e next/navigation-er useRouter thakle
+    // eta router.push(SUPPLIER_DASHBOARD_PATH) diye o replace kora jay.
+    if (typeof window !== 'undefined') {
+      window.location.href = SUPPLIER_DASHBOARD_PATH;
+    }
   };
 
   return (
@@ -424,33 +450,26 @@ export const ScreenSupplierOnboarding: React.FC<ScreenSupplierOnboardingProps> =
 
         </div>
 
+        {/* STEP 4: Subscription Plan & Review */}
+        {currentStep === 4 && (
+          <SupplierReviewStep4
+            onBack={() => setCurrentStep(3)}
+            onSubmit={() => {
+              setCurrentStep(5); // Submit করার পর Step 5 এ চলে যাবে
+            }}
+            triggerToast={triggerToast}
+          />
+        )}
 
-{/* STEP 4: Subscription Plan & Review */}
+        {/* STEP 5: Success — Ekhon auth save kore asol dashboard-e pathay */}
+        {currentStep === 5 && (
+          <SupplierSuccessStep5
+            ownerName={formData.ownerName}
+            onEditApplication={() => setCurrentStep(1)} // আবার প্রথম স্টেপে নিয়ে যাবে
+            onGoToSign={handleGoToDashboard}
+          />
+        )}
 
-
-{currentStep === 4 && (
-  <SupplierReviewStep4
-    onBack={() => setCurrentStep(3)}
-    onSubmit={() => {
-      setCurrentStep(5); // Submit করার পর Step 5 এ চলে যাবে
-    }}
-    triggerToast={triggerToast}
-  />
-)}
-{currentStep === 5 && (
-  <SupplierSuccessStep5
-    ownerName={formData.ownerName}
-    onEditApplication={() => setCurrentStep(1)} // আবার প্রথম স্টেপে নিয়ে যাবে
-    onGoToSign={() => {
-      if (typeof onNavigate === 'function') {
-        onNavigate('gateway' as any);
-      } else {
-        // যদি onNavigate না থাকে, সরাসরি লগইন পেজে রিডাইরেক্ট করবে
-        window.location.href = '/login'; 
-      }
-    }}
-  />
-)}
         {/* Support Link */}
         <div className="text-center">
           <p className="text-xs text-slate-500 font-medium">
