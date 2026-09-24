@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Mail, Lock, Eye, EyeOff, Shield, Star, ArrowRight, Check, Info } from 'lucide-react';
 import { RoleType, ScreenType } from '../types';
+import { saveAuthUser } from '../lib/auth'; // path apnar structure onujayi thik korben
 
 interface ScreenLoginProps {
   selectedRole: RoleType;
@@ -31,6 +32,29 @@ export const ScreenLogin: React.FC<ScreenLoginProps> = ({
       default:
         return '';
     }
+  };
+
+  const handleLoginSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!emailInput.trim() || !passwordInput.trim()) {
+      triggerToast('Email/phone এবং password পূরণ করুন');
+      return;
+    }
+
+    // Auth user save kora hocche localStorage-e, jate Navbar
+    // login/register hoye jawar por thik nam/email/role dekhay
+    saveAuthUser({
+      name: emailInput.split('@')[0] || 'User',
+      email: emailInput,
+      role: selectedRole,
+    });
+
+    triggerToast(`Signed in successfully as ${selectedRole.toUpperCase()}`);
+
+    // Login sofol hole apni chaile ekhane sorasori
+    // dashboard ba home screen e navigate korte paren, jemon:
+    // onNavigate('home' as any);
   };
 
   return (
@@ -126,7 +150,7 @@ export const ScreenLogin: React.FC<ScreenLoginProps> = ({
             <p className="text-xs text-slate-500 mt-1">Sign in to access your marketplace dashboard.</p>
           </div>
 
-          {/* Role Tabs */}
+          {/* Role Tabs (3 sotto role: customer / affiliate / supplier) */}
           <div className="bg-slate-100/80 p-1 rounded-2xl mb-3 grid grid-cols-3 gap-1 border border-slate-200/80 text-xs font-medium">
             <button
               type="button"
@@ -153,16 +177,6 @@ export const ScreenLogin: React.FC<ScreenLoginProps> = ({
                 selectedRole === 'supplier' ? 'bg-white text-blue-600 font-bold shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-
-               <span>🛒 Super Admin</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedRole('affiliate')}
-              className={`py-2 px-2 rounded-xl flex items-center justify-center gap-1.5 transition-all ${
-                selectedRole === 'affiliate' ? 'bg-white text-blue-600 font-bold shadow-xs' : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
               <span>🏪 Supplier / Seller</span>
             </button>
           </div>
@@ -174,10 +188,7 @@ export const ScreenLogin: React.FC<ScreenLoginProps> = ({
           </div>
 
           {/* Form */}
-          <form onSubmit={(e) => {
-            e.preventDefault();
-            triggerToast(`Signed in successfully as ${selectedRole.toUpperCase()}`);
-          }} className="space-y-4">
+          <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
