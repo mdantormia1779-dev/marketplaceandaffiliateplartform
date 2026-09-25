@@ -11,8 +11,10 @@ export default function ConditionalLayout({
 }) {
   const pathname = usePathname();
 
-  // dashboard route হলে navbar/footer hide হবে
-  const isDashboard = pathname?.startsWith("/supplierdashboard");
+  // supplierdashboard ba affiliatedashboard hole navbar/footer hide hobe
+  const isDashboard = 
+    pathname?.startsWith("/supplierdashboard") || 
+    pathname?.startsWith("/affiliatedashboard");
 
   return (
     <>
