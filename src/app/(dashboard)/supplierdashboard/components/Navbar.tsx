@@ -10,31 +10,31 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-import {
-  AuthUser,
-  getAuthUser,
-  clearAuthUser,
-  getInitials,
-  AUTH_EVENT,
-} from "../../../../lib/auth"; // path apnar folder structure onujayi thik korben
 
-const defaultUser: AuthUser = {
+export type ProfileData = {
+  name: string;
+  email: string;
+  phone: string;
+  storeName: string;
+};
+
+const defaultProfile: ProfileData = {
   name: "Ayesha Rahman",
   email: "supplier@example.com",
-  role: "supplier",
+  phone: "+880 1XXX-XXXXXX",
+  storeName: "Store Owner",
 };
 
-const roleBadgeClass: Record<AuthUser["role"], string> = {
-  supplier: "bg-purple-50 text-purple-600",
-  affiliate: "bg-emerald-50 text-emerald-600",
-  customer: "bg-blue-50 text-blue-600",
-};
-
-const roleLabel: Record<AuthUser["role"], string> = {
-  supplier: "Supplier",
-  affiliate: "Affiliate",
-  customer: "Customer",
-};
+function getInitials(name: string) {
+  return (
+    name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((word) => word.charAt(0).toUpperCase())
+      .join("") || "SA"
+  );
+}
 
 export default function Navbar() {
   /*
@@ -43,7 +43,7 @@ export default function Navbar() {
    *
    * So we DO NOT read localStorage during the initial render.
    */
-  const [profile, setProfile] = useState<AuthUser>(defaultUser);
+  const [profile, setProfile] = useState<ProfileData>(defaultProfile);
 
   const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -52,8 +52,7 @@ export default function Navbar() {
   /*
    * Mark component as mounted.
    *
-   * We also subscribe to auth updates here (from lib/auth.ts),
-   * so login/logout anywhere in the app reflects here instantly.
+   * We also subscribe to profile updates here.
    * There is NO synchronous setProfile() call directly
    * inside the effect body.
    */
@@ -62,12 +61,23 @@ export default function Navbar() {
 
     const loadProfile = () => {
       try {
-        const savedUser = getAuthUser();
+        const saved = localStorage.getItem("supplier-profile");
+
+        if (!saved) {
+          if (!cancelled) {
+            setMounted(true);
+          }
+          return;
+        }
+
+        const savedData = JSON.parse(saved);
 
         if (!cancelled) {
-          if (savedUser) {
-            setProfile(savedUser);
-          }
+          setProfile({
+            ...defaultProfile,
+            ...savedData,
+          });
+
           setMounted(true);
         }
       } catch {
@@ -85,37 +95,46 @@ export default function Navbar() {
      */
     const timer = window.setTimeout(loadProfile, 0);
 
-    const handleAuthUpdate = () => {
-      const savedUser = getAuthUser();
-      if (savedUser) {
-        setProfile(savedUser);
-      } else {
-        setProfile(defaultUser);
+    const handleProfileUpdate = (event: Event) => {
+      const customEvent = event as CustomEvent<ProfileData>;
+
+      if (!customEvent.detail) {
+        return;
       }
+
+      setProfile({
+        ...defaultProfile,
+        ...customEvent.detail,
+      });
     };
 
-    window.addEventListener(AUTH_EVENT, handleAuthUpdate);
-    window.addEventListener("storage", handleAuthUpdate);
+    window.addEventListener(
+      "supplier-profile-updated",
+      handleProfileUpdate
+    );
 
     return () => {
       cancelled = true;
       window.clearTimeout(timer);
 
-      window.removeEventListener(AUTH_EVENT, handleAuthUpdate);
-      window.removeEventListener("storage", handleAuthUpdate);
+      window.removeEventListener(
+        "supplier-profile-updated",
+        handleProfileUpdate
+      );
     };
   }, []);
 
-  const initials = mounted ? getInitials(profile.name) : "SA";
-  const displayName = mounted ? profile.name : defaultUser.name;
-  const displayEmail = mounted ? profile.email : defaultUser.email;
-  const displayRole = mounted ? profile.role : defaultUser.role;
+  const initials = mounted
+    ? getInitials(profile.name)
+    : "SA";
 
-  const handleLogout = () => {
-    clearAuthUser();
-    setMenuOpen(false);
-    window.location.href = "/login";
-  };
+  const displayName = mounted
+    ? profile.name
+    : defaultProfile.name;
+
+  const displayEmail = mounted
+    ? profile.email
+    : defaultProfile.email;
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
@@ -216,16 +235,9 @@ export default function Navbar() {
 
               {/* User information */}
               <div className="hidden text-left sm:block">
-                <div className="flex items-center gap-1.5">
-                  <p className="max-w-30 truncate text-xs font-semibold text-slate-800">
-                    {displayName}
-                  </p>
-                  <span
-                    className={`shrink-0 rounded-md px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${roleBadgeClass[displayRole]}`}
-                  >
-                    {roleLabel[displayRole]}
-                  </span>
-                </div>
+                <p className="max-w-30 truncate text-xs font-semibold text-slate-800">
+                  {displayName}
+                </p>
 
                 <p className="max-w-30 truncate text-[10px] text-slate-400">
                   {displayEmail}
@@ -253,16 +265,9 @@ export default function Navbar() {
                     </div>
 
                     <div className="min-w-0">
-                      <div className="flex items-center gap-1.5">
-                        <p className="truncate text-sm font-semibold text-slate-800">
-                          {displayName}
-                        </p>
-                        <span
-                          className={`shrink-0 rounded-md px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide ${roleBadgeClass[displayRole]}`}
-                        >
-                          {roleLabel[displayRole]}
-                        </span>
-                      </div>
+                      <p className="truncate text-sm font-semibold text-slate-800">
+                        {displayName}
+                      </p>
 
                       <p className="truncate text-xs text-slate-400">
                         {displayEmail}
@@ -310,7 +315,9 @@ export default function Navbar() {
                   <button
                     type="button"
                     className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-rose-600 transition hover:bg-rose-50"
-                    onClick={handleLogout}
+                    onClick={() => {
+                      setMenuOpen(false);
+                    }}
                   >
                     <LogOut size={16} />
 
