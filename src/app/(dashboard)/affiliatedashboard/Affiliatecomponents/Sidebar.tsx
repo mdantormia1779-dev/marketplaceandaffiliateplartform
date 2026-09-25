@@ -69,10 +69,7 @@ const SIDEBAR_GROUPS: MenuGroup[] = [
             label: "Browse Products",
             href: "/affiliatedashboard/browseproducts",
           },
-          {
-            label: "Top Performing",
-            href: "/affiliatedashboard/products/top-performing",
-          },
+         
         ],
       },
 
