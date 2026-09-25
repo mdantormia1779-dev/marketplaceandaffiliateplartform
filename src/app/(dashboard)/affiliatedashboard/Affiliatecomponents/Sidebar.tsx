@@ -65,6 +65,13 @@ const SIDEBAR_GROUPS: MenuGroup[] = [
         label: "Products",
         href: "/affiliatedashboard/affiliate-products",
         icon: Store,
+        children: [
+          {
+            label: "Browse Products",
+            href: "/affiliatedashboard/browseproducts",
+          },
+         
+        ],
       },
 
       {
