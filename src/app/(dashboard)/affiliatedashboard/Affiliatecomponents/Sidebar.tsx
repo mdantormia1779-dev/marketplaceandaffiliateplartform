@@ -67,7 +67,7 @@ const SIDEBAR_GROUPS: MenuGroup[] = [
         children: [
           {
             label: "Browse Products",
-            href: "/affiliatedashboard/products",
+            href: "/affiliatedashboard/browseproducts",
           },
           {
             label: "Top Performing",
