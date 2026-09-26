@@ -1,0 +1,77 @@
+import { Notification } from "./types";
+
+// Replace with data fetched from your API layer / database
+export const NOTIFICATIONS: Notification[] = [
+  {
+    id: "n1",
+    category: "system",
+    title: "New campaign available",
+    message: "Winter Electronics campaign is live with up to 18% commission.",
+    createdAt: "2026-09-24T09:00:00Z",
+    read: false,
+  },
+  {
+    id: "n2",
+    category: "system",
+    title: "Campaign performance tip",
+    message: "Your Summer Campaign conversion rate is 1.4% above marketplace average.",
+    createdAt: "2026-09-22T09:00:00Z",
+    read: false,
+  },
+  {
+    id: "n3",
+    category: "sales",
+    title: "New sale confirmed",
+    message: "Your link generated a sale for Smart Fitness Watch Series 7.",
+    createdAt: "2026-09-25T14:20:00Z",
+    read: true,
+  },
+  {
+    id: "n4",
+    category: "sales",
+    title: "Order delivered",
+    message: "An order tracked through your link has been delivered to the customer.",
+    createdAt: "2026-09-23T11:10:00Z",
+    read: true,
+  },
+  {
+    id: "n5",
+    category: "commission",
+    title: "Commission approved",
+    message: "৳420 commission has been approved and added to your wallet.",
+    createdAt: "2026-09-24T16:45:00Z",
+    read: false,
+  },
+  {
+    id: "n6",
+    category: "commission",
+    title: "Commission pending",
+    message: "A new order is in its return window — commission will be released soon.",
+    createdAt: "2026-09-21T08:30:00Z",
+    read: true,
+  },
+  {
+    id: "n7",
+    category: "bonus",
+    title: "Sales milestone reached",
+    message: "You crossed 25 sales this month — ৳1,500 bonus credited.",
+    createdAt: "2026-09-20T10:00:00Z",
+    read: true,
+  },
+  {
+    id: "n8",
+    category: "referral",
+    title: "Referral joined",
+    message: "An affiliate you referred has completed registration.",
+    createdAt: "2026-09-19T13:15:00Z",
+    read: true,
+  },
+  {
+    id: "n9",
+    category: "withdrawal",
+    title: "Withdrawal approved",
+    message: "Your withdrawal request of ৳3,200 has been approved and is processing.",
+    createdAt: "2026-09-18T17:05:00Z",
+    read: true,
+  },
+];
