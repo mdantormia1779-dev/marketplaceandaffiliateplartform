@@ -21,6 +21,8 @@ import {
   ChevronDown,
   ChevronRight,
   X,
+  User,
+  HelpCircle,
 } from "lucide-react";
 
 type MenuChild = {
@@ -147,6 +149,16 @@ const SIDEBAR_GROUPS: MenuGroup[] = [
         label: "Settings",
         href: "/affiliatedashboard/settings",
         icon: Settings,
+      },
+      {
+        label: "Affiliate Profile",
+        href: "/affiliatedashboard/affiliateprofile",
+        icon: User,
+      },
+      {
+        label: "Help & Support",
+        href: "/affiliatedashboard/help",
+        icon: HelpCircle,
       },
     ],
   },
