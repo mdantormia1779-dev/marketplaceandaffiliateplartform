@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import TransactionAndPayout from "../../components/TransactionAndPayout";
 import {
@@ -87,9 +88,12 @@ export default function WalletPage() {
               </span>
               <span className="text-[11px] text-indigo-100 font-medium">Ready to withdraw</span>
             </div>
-            <button className="mt-4 bg-white text-indigo-600 hover:bg-indigo-50 font-bold text-xs py-2.5 px-4 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2">
+            <Link
+              href="/supplierdashboard/finance/withdraw"
+              className="mt-4 bg-white text-indigo-600 hover:bg-indigo-50 font-bold text-xs py-2.5 px-4 rounded-xl shadow-xs transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
               <DollarSign className="w-4 h-4" /> Withdraw funds
-            </button>
+            </Link>
           </div>
 
           {/* Pending Balance */}
