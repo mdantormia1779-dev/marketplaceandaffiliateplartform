@@ -5,9 +5,7 @@ import {
   Star,
   Package,
   Users,
-  ExternalLink,
 } from "lucide-react";
-import Link from "next/link";
 import { useSyncExternalStore } from "react";
 
 type ProfileData = {
@@ -23,10 +21,6 @@ const defaultProfile: ProfileData = {
   phone: "+880 1XXX-XXXXXX",
   storeName: "Aurora Store",
 };
-
-/* =========================================================
-   PROFILE STORAGE
-========================================================= */
 
 /* =========================================================
    EXTERNAL STORE
@@ -59,10 +53,6 @@ const getServerSnapshot = () => {
 ========================================================= */
 
 const StoreBanner = () => {
-  /*
-   * The snapshot changes whenever supplier-profile changes.
-   * This keeps Navbar, ProfileSettings and StoreBanner synced.
-   */
   const profileSnapshot = useSyncExternalStore(
     subscribeToProfile,
     getClientSnapshot,
@@ -71,9 +61,6 @@ const StoreBanner = () => {
 
   let profile = defaultProfile;
 
-  /*
-   * Convert saved profile JSON into usable profile data.
-   */
   if (profileSnapshot) {
     try {
       const parsed: unknown = JSON.parse(profileSnapshot);
@@ -102,7 +89,8 @@ const StoreBanner = () => {
               : defaultProfile.phone,
 
           storeName:
-            typeof data.storeName === "string" && data.storeName.trim()
+            typeof data.storeName === "string" &&
+            data.storeName.trim()
               ? data.storeName
               : defaultProfile.storeName,
         };
@@ -117,11 +105,10 @@ const StoreBanner = () => {
 
   return (
     <div className="bg-[#f0f4ff]/80 border border-indigo-100 rounded-2xl p-5 sm:p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
-      {/* =====================================================
-          STORE INFORMATION
-      ====================================================== */}
 
+      {/* Store Information */}
       <div className="flex items-center gap-4">
+
         {/* Store Avatar */}
         <div className="w-16 h-16 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-extrabold text-2xl shadow-md">
           {firstLetter}
@@ -142,6 +129,7 @@ const StoreBanner = () => {
           </div>
 
           <div className="flex flex-wrap items-center gap-4 text-xs text-slate-600">
+
             {/* Rating */}
             <span className="flex items-center gap-1 font-medium">
               <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
@@ -156,35 +144,20 @@ const StoreBanner = () => {
             {/* Products */}
             <span className="flex items-center gap-1">
               <Package className="w-4 h-4 text-slate-400" />
-
               248 products
             </span>
 
             {/* Followers */}
             <span className="flex items-center gap-1">
               <Users className="w-4 h-4 text-slate-400" />
-
               18.4K followers
             </span>
+
           </div>
         </div>
       </div>
 
-      {/* =====================================================
-          ACTION BUTTONS
-      ====================================================== */}
-
-      <div className="flex items-center gap-3">
-        {/* View Store */}
-          <Link
-            href="/products"
-            className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 active:scale-95"
-          >
-            <ExternalLink className="h-4 w-4" />
-            View Store
-          </Link>
-        </div>
-      </div>
+    </div>
   );
 };
 

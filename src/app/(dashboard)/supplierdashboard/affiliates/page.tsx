@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import TopHeader from "./components/TopHeader";
+import Navbar from "../components/Navbar";
 import PageHeader from "./components/PageHeader";
 import StatCards from "./components/StatCards";
 import TopAffiliates from "./components/TopAffiliates";
@@ -144,7 +144,7 @@ export default function AffiliatesPage() {
 
   return (
     <div className="min-h-screen bg-slate-50/70">
-      <TopHeader notificationCount={counts.pending} />
+      <Navbar />
 
       <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <PageHeader

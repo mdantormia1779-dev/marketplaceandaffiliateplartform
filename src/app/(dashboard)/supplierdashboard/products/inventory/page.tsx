@@ -2,8 +2,9 @@
 
 import { useMemo, useState } from "react";
 
+import Navbar from "@/app/(dashboard)/supplierdashboard/components/Navbar";
+
 import {
-  TopHeader,
   OverviewHeader,
   StatsGrid,
   AlertsSection,
@@ -160,7 +161,7 @@ const exportToCSV = () => {
 
   return (
     <div className="min-h-screen bg-slate-50/70 text-slate-900">
-      <TopHeader alertCount={counts.out + counts.low} />
+      <Navbar />
 
       <main className="mx-auto max-w-[1400px] space-y-6 p-6">
        <OverviewHeader onExport={exportToCSV} onAddStockClick={() => setAddStockOpen(true)} />
@@ -228,7 +229,7 @@ const exportToCSV = () => {
         onClose={() => setAddStockOpen(false)}
         onSubmit={handleAddStock}
       />
-      
+
     </div>
   );
 }

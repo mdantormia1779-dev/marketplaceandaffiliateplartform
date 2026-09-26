@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Bell,
   ChevronDown,
@@ -37,25 +38,14 @@ function getInitials(name: string) {
 }
 
 export default function Navbar() {
-  /*
-   * IMPORTANT:
-   * Server and first client render must be identical.
-   *
-   * So we DO NOT read localStorage during the initial render.
-   */
+  const router = useRouter();
+
   const [profile, setProfile] = useState<ProfileData>(defaultProfile);
 
   const [mounted, setMounted] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
 
-  /*
-   * Mark component as mounted.
-   *
-   * We also subscribe to profile updates here.
-   * There is NO synchronous setProfile() call directly
-   * inside the effect body.
-   */
   useEffect(() => {
     let cancelled = false;
 
@@ -87,12 +77,6 @@ export default function Navbar() {
       }
     };
 
-    /*
-     * Queue the localStorage read after the initial render.
-     *
-     * This avoids the eslint react-hooks/set-state-in-effect
-     * warning while keeping SSR and hydration identical.
-     */
     const timer = window.setTimeout(loadProfile, 0);
 
     const handleProfileUpdate = (event: Event) => {
@@ -135,6 +119,11 @@ export default function Navbar() {
   const displayEmail = mounted
     ? profile.email
     : defaultProfile.email;
+
+  const goToSettings = () => {
+    setMenuOpen(false);
+    router.push("/supplierdashboard/account/settings");
+  };
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
@@ -298,9 +287,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50"
-                    onClick={() => {
-                      setMenuOpen(false);
-                    }}
+                    onClick={goToSettings}
                   >
                     <Settings
                       size={16}

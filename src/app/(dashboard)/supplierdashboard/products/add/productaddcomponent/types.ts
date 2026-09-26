@@ -31,6 +31,8 @@ export type Form = {
   featured: boolean;
 };
 
+export const PRODUCTS_URL = "/supplierdashboard/products";
+
 export const EMPTY: Form = {
   title: "",
   description: "",

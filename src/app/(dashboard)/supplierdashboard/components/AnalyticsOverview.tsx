@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Download,
   Plus,
@@ -11,7 +12,6 @@ import {
   Crown,
   Package,
 } from "lucide-react";
-
 import {
   AreaChart,
   Area,
@@ -23,68 +23,47 @@ import {
   Pie,
   Cell,
 } from "recharts";
-
 import {
   dynamicStoreData,
   categoryData,
   TimeRange,
 } from "../dashboardData";
 
-import AddProductModal, {
-  ProductData,
-} from "./AddProductModal";
-
 const AnalyticsOverview = () => {
-  const [timeRange, setTimeRange] = useState<TimeRange>("30 days");
+  const router = useRouter();
 
-  /* Add Product Modal */
-  const [showAddProduct, setShowAddProduct] = useState(false);
-
-  /* Newly added products */
-  const [addedProducts, setAddedProducts] = useState<ProductData[]>([]);
+  const [timeRange, setTimeRange] =
+    useState<TimeRange>("30 days");
 
   const currentData = dynamicStoreData[timeRange];
 
-  /* =========================EXPORT REPORT========================= */
+  // Export report
   const handleExport = () => {
     const csvContent =
       "data:text/csv;charset=utf-8," +
-      ["Title,Value,Growth,Subtext"]
-        .concat(
-          currentData.stats.map(
-            (s) =>
-              `"${s.title}","${s.value}","${s.growth}","${s.subText}"`
-          )
-        )
-        .join("\n");
+      [
+        "Title,Value,Growth,Subtext",
+        ...currentData.stats.map(
+          (s) =>
+            `"${s.title}","${s.value}","${s.growth}","${s.subText}"`
+        ),
+      ].join("\n");
 
     const encodedUri = encodeURI(csvContent);
-
     const link = document.createElement("a");
 
     link.setAttribute("href", encodedUri);
-
     link.setAttribute(
       "download",
       `store_report_${timeRange.replace(" ", "_")}.csv`
     );
 
     document.body.appendChild(link);
-
     link.click();
-
     document.body.removeChild(link);
   };
 
-  /* ========================= ADD PRODUCT========================= */
-  const handleProductAdded = (product: ProductData) => {
-    setAddedProducts((previousProducts) => [
-      ...previousProducts,
-      product,
-    ]);
-  };
-
-  /* =========================STAT ICONS========================= */
+  // Stat icons
   const getStatIcon = (type: string) => {
     switch (type) {
       case "sales":
@@ -136,25 +115,25 @@ const AnalyticsOverview = () => {
 
   return (
     <div className="space-y-6">
-      {/* ========================= FILTER TABS & EXPORT ========================= */}
+      {/* Filter Tabs & Actions */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="inline-flex p-1 bg-slate-200/60 rounded-xl max-w-fit">
-          {(["Today", "7 days", "30 days", "12 months"] as TimeRange[]).map(
-            (tab) => (
-              <button
-                key={tab}
-                type="button"
-                onClick={() => setTimeRange(tab)}
-                className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                  timeRange === tab
-                    ? "bg-indigo-600 text-white shadow-sm"
-                    : "text-slate-600 hover:text-slate-900"
-                }`}
-              >
-                {tab}
-              </button>
-            )
-          )}
+          {(
+            ["Today", "7 days", "30 days", "12 months"] as TimeRange[]
+          ).map((tab) => (
+            <button
+              key={tab}
+              type="button"
+              onClick={() => setTimeRange(tab)}
+              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                timeRange === tab
+                  ? "bg-indigo-600 text-white shadow-sm"
+                  : "text-slate-600 hover:text-slate-900"
+              }`}
+            >
+              {tab}
+            </button>
+          ))}
         </div>
 
         <div className="flex items-center gap-3">
@@ -171,7 +150,9 @@ const AnalyticsOverview = () => {
           {/* Add Product */}
           <button
             type="button"
-            onClick={() => setShowAddProduct(true)}
+            onClick={() =>
+              router.push("/supplierdashboard/products/add")
+            }
             className="flex items-center gap-2 px-3.5 py-2 bg-indigo-600 text-white rounded-xl text-xs font-semibold hover:bg-indigo-700 transition shadow-sm active:scale-95"
           >
             <Plus className="w-3.5 h-3.5" />
@@ -180,64 +161,51 @@ const AnalyticsOverview = () => {
         </div>
       </div>
 
-      {/* STAT CARDS GRID */}
+      {/* Stat Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
-        {currentData.stats.map((stat, index) => {
-          /*
-           * Products count becomes dynamic.
-          */
-          const displayValue =
-            stat.type === "products"
-              ? String(
-                  Number(stat.value.replace(/[^0-9]/g, "")) +
-                    addedProducts.length
-                )
-              : stat.value;
+        {currentData.stats.map((stat, index) => (
+          <div
+            key={index}
+            className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex flex-col justify-between hover:border-indigo-100 transition"
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-xs font-medium text-slate-500">
+                {stat.title}
+              </span>
 
-          return (
-            <div
-              key={index}
-              className="bg-white border border-slate-100 rounded-2xl p-4 shadow-sm flex flex-col justify-between hover:border-indigo-100 transition"
-            >
-              <div className="flex items-center justify-between">
-                <span className="text-xs font-medium text-slate-500">
-                  {stat.title}
+              {getStatIcon(stat.type)}
+            </div>
+
+            <div className="mt-4">
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-extrabold text-slate-900">
+                  {stat.value}
                 </span>
 
-                {getStatIcon(stat.type)}
-              </div>
-
-              <div className="mt-4">
-                <div className="flex items-center gap-2">
-                  <span className="text-xl font-extrabold text-slate-900">
-                    {displayValue}
+                {stat.growth && (
+                  <span
+                    className={`px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-0.5 ${
+                      stat.isUp
+                        ? "bg-emerald-100 text-emerald-700"
+                        : "bg-rose-100 text-rose-700"
+                    }`}
+                  >
+                    {stat.isUp ? "↑" : "↓"} {stat.growth}
                   </span>
-
-                  {stat.growth && (
-                    <span
-                      className={`px-1.5 py-0.5 rounded text-[10px] font-bold flex items-center gap-0.5 ${
-                        stat.isUp
-                          ? "bg-emerald-100 text-emerald-700"
-                          : "bg-rose-100 text-rose-700"
-                      }`}
-                    >
-                      {stat.isUp ? "↑" : "↓"} {stat.growth}
-                    </span>
-                  )}
-                </div>
-
-                <p className="text-[11px] text-slate-400 mt-1">
-                  {stat.subText}
-                </p>
+                )}
               </div>
+
+              <p className="text-[11px] text-slate-400 mt-1">
+                {stat.subText}
+              </p>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
 
-      {/* CHARTS ROW */}
+      {/* Charts */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* SALES CHART */}
+        {/* Sales Chart */}
         <div className="lg:col-span-2 bg-white border border-slate-100 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
           <div className="flex items-center justify-between mb-4">
             <div>
@@ -312,7 +280,7 @@ const AnalyticsOverview = () => {
                     fill: "#94a3b8",
                     fontSize: 11,
                   }}
-                  tickFormatter={(value) => `$${value}k`}
+                  tickFormatter={(v) => `$${v}k`}
                 />
 
                 <Tooltip
@@ -340,7 +308,7 @@ const AnalyticsOverview = () => {
           </div>
         </div>
 
-        {/* CATEGORY PIE CHART */}
+        {/* Revenue Category */}
         <div className="bg-white border border-slate-100 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
           <div>
             <h3 className="text-base font-bold text-slate-900">
@@ -414,13 +382,6 @@ const AnalyticsOverview = () => {
           </div>
         </div>
       </div>
-
-      {/*  ADD PRODUCT MODAL */}
-      <AddProductModal
-        open={showAddProduct}
-        onClose={() => setShowAddProduct(false)}
-        onProductAdded={handleProductAdded}
-      />
     </div>
   );
 };
