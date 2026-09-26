@@ -1,6 +1,9 @@
 "use client";
 
 import { useMemo, useState } from "react";
+
+import Navbar from "@/app/(dashboard)/supplierdashboard/components/Navbar";
+
 import type { Order, OrderStatus, SortOption, StatusFilter } from "./types";
 import { ORDERS } from "./ordersData";
 import {
@@ -51,37 +54,41 @@ export default function OrdersPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-6 sm:px-8">
-      <div className="mx-auto w-full max-w-7xl">
-        <div className="mb-6 flex flex-col gap-1">
-          <h1 className="text-2xl font-semibold text-slate-900">Orders</h1>
-          <p className="text-sm text-slate-500">
-            Track incoming orders and update their status as you process them.
-          </p>
-        </div>
+    <div className="min-h-screen bg-slate-50">
+      <Navbar />
 
-        <OrderSummaryCards
-          totalOrders={orders.length}
-          pendingCount={pendingCount}
-          deliveredCount={deliveredCount}
-          totalRevenue={totalRevenue}
-        />
+      <div className="px-4 py-6 sm:px-8">
+        <div className="mx-auto w-full max-w-7xl">
+          <div className="mb-6 flex flex-col gap-1">
+            <h1 className="text-2xl font-semibold text-slate-900">Orders</h1>
+            <p className="text-sm text-slate-500">
+              Track incoming orders and update their status as you process them.
+            </p>
+          </div>
 
-        <div className="mb-4 flex flex-col gap-3 rounded-xl border border-slate-100 bg-white p-3 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-          <OrderStatusTabs
-            activeFilter={statusFilter}
-            onFilterChange={setStatusFilter}
-            counts={statusCounts}
+          <OrderSummaryCards
+            totalOrders={orders.length}
+            pendingCount={pendingCount}
+            deliveredCount={deliveredCount}
+            totalRevenue={totalRevenue}
           />
-          <OrderFilters
-            query={query}
-            onQueryChange={setQuery}
-            sort={sort}
-            onSortChange={setSort}
-          />
-        </div>
 
-        <OrderList orders={filtered} onStatusChange={handleStatusChange} />
+          <div className="mb-4 flex flex-col gap-3 rounded-xl border border-slate-100 bg-white p-3 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+            <OrderStatusTabs
+              activeFilter={statusFilter}
+              onFilterChange={setStatusFilter}
+              counts={statusCounts}
+            />
+            <OrderFilters
+              query={query}
+              onQueryChange={setQuery}
+              sort={sort}
+              onSortChange={setSort}
+            />
+          </div>
+
+          <OrderList orders={filtered} onStatusChange={handleStatusChange} />
+        </div>
       </div>
     </div>
   );

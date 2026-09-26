@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { CalendarDays, Crown, Flag, RefreshCw, Settings } from "lucide-react";
 import Card from "./Card";
 import StatusBadge from "./StatusBadge";
 import InfoItem from "./InfoItem";
 import CancelModal from "./CancelModal";
+import ManagePlanModal from "./ManagePlanModal";
 import { PlanData } from "./types";
 import { formatBDT, formatDate } from "./utils";
 
@@ -15,10 +15,22 @@ interface Props {
   onToggleAutoRenewal: () => void;
   onCancel: () => void;
   onResume: () => void;
+  onChangeBillingCycle?: (cycle: "Monthly" | "Yearly") => void;
+  onUpdateBillingEmail?: (email: string) => void;
+  onChangePlanTier?: (tierName: string) => void;
 }
 
-export default function PlanHeader({ plan, onToggleAutoRenewal, onCancel, onResume }: Props) {
+export default function PlanHeader({
+  plan,
+  onToggleAutoRenewal,
+  onCancel,
+  onResume,
+  onChangeBillingCycle,
+  onUpdateBillingEmail,
+  onChangePlanTier,
+}: Props) {
   const [confirming, setConfirming] = useState(false);
+  const [managingPlan, setManagingPlan] = useState(false);
   const isActive = plan.status === "Active";
   const per = plan.billingCycle === "Monthly" ? "month" : "year";
 
@@ -38,10 +50,12 @@ export default function PlanHeader({ plan, onToggleAutoRenewal, onCancel, onResu
         </div>
 
         <div className="flex gap-3">
-          <Link href="/supplierdashboard/subscription/upgrade"
-            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-blue-700">
+          <button
+            onClick={() => setManagingPlan(true)}
+            className="flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white hover:bg-blue-700"
+          >
             <Settings size={14} /> Manage Plan
-          </Link>
+          </button>
           {isActive ? (
             <button onClick={() => setConfirming(true)}
               className="rounded-lg border border-slate-200 px-4 py-2.5 text-xs font-medium text-slate-700 hover:bg-slate-50">
@@ -76,6 +90,17 @@ export default function PlanHeader({ plan, onToggleAutoRenewal, onCancel, onResu
           endDate={formatDate(plan.nextBillingDate)}
           onClose={() => setConfirming(false)}
           onConfirm={() => { onCancel(); setConfirming(false); }}
+        />
+      )}
+
+      {managingPlan && (
+        <ManagePlanModal
+          plan={plan}
+          onClose={() => setManagingPlan(false)}
+          onToggleAutoRenewal={onToggleAutoRenewal}
+          onChangeBillingCycle={onChangeBillingCycle}
+          onUpdateBillingEmail={onUpdateBillingEmail}
+          onChangePlanTier={onChangePlanTier}
         />
       )}
     </Card>

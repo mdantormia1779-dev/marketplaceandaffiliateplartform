@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { Info } from "lucide-react";
+import Navbar from "../components/Navbar";
 import PageHeader from "./Discountcomponents/PageHeader";
 import StatCards from "./Discountcomponents/StatCards";
 import CampaignSchedule from "./Discountcomponents/CampaignSchedule";
@@ -14,7 +15,6 @@ import EditRuleDialog from "./Discountcomponents/EditRuleDialog";
 import DeleteConfirmDialog from "./Discountcomponents/DeleteConfirmDialog";
 import { RULES, TYPE_MAP, PAGE_SIZE, type Rule } from "./Discountcomponents/data";
 import { rulesToCsv, downloadCsv } from "./Discountcomponents/lib";
-import Topbar from "./Discountcomponents/Topbar";
 
 export default function DiscountsPage() {
   const [rules, setRules] = useState<Rule[]>(RULES);
@@ -107,11 +107,7 @@ export default function DiscountsPage() {
 
     return (
     <div className="min-h-screen bg-slate-50/70">
-      <Topbar
-        title="Discounts"
-        subtitle="Set up automatic discounts for your products."
-        notificationCount={3}
-      />
+      <Navbar />
 
       <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <PageHeader

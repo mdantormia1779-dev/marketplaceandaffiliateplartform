@@ -14,9 +14,7 @@ export const newVariant = (): Variant => ({
   stock: "",
 });
 
-export const inputCls = (error?: boolean) =>
-  `h-10 w-full rounded-md border bg-white px-3 text-[13px] text-slate-900 outline-none transition placeholder:text-slate-400 focus:ring-2 disabled:bg-slate-50 disabled:text-slate-400 ${
-    error
-      ? "border-red-400 focus:border-red-500 focus:ring-red-100"
-      : "border-slate-200 focus:border-blue-500 focus:ring-blue-100"
-  }`;
+export const inputCls = (hasError?: boolean) =>
+  `w-full rounded-lg border ${
+    hasError ? "border-rose-400 focus:ring-rose-500/20" : "border-slate-200 focus:ring-blue-500/20"
+  } bg-white px-3 py-2 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-blue-500 focus:ring-2`;

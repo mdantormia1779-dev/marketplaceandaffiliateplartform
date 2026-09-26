@@ -101,7 +101,7 @@ export const ScreenLogin: React.FC<ScreenLoginProps> = ({
             <div className="flex items-center gap-3 mb-3">
               <img 
                 src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=120" 
-                alt="Ayesha Rahman" 
+                alt="" 
                 className="w-10 h-10 rounded-full object-cover border border-blue-500/30"
               />
               <div>
@@ -115,11 +115,11 @@ export const ScreenLogin: React.FC<ScreenLoginProps> = ({
                     Verified supplier
                   </span>
                 </div>
-                <p className="text-xs font-bold text-white mt-0.5">Ayesha Rahman <span className="text-slate-400 font-normal">Founder, Loom & Thread</span></p>
+                <p className="text-xs font-bold text-white mt-0.5"> <span className="text-slate-400 font-normal">Founder, Loom & Thread</span></p>
               </div>
             </div>
             <p className="text-xs text-slate-300 italic leading-relaxed">
-              "I switched my whole store to Nexora and my affiliate crew pushed sales 3x in one quarter. Payouts hit my bKash every other week without me chasing anyone."
+              &ldquo;I switched my whole store to Nexora and my affiliate crew pushed sales 3x in one quarter. Payouts hit my bKash every other week without me chasing anyone.&rdquo;
             </p>
           </div>
         </div>
