@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Navbar from "../../components/Navbar";
 import SalesCards, { type StatItem } from "../../components/SalesCards";
 import SalesCharts, {
@@ -28,7 +28,7 @@ type ChartPoint = {
   net: number;
 };
 
-const DUMMY_PRODUCTS: ProductRevenueItem[] = [
+const BASE_PRODUCTS: ProductRevenueItem[] = [
   {
     id: "1",
     name: "Aurora Noise-Cancelling Headphones",
@@ -127,7 +127,7 @@ const DUMMY_PRODUCTS: ProductRevenueItem[] = [
   },
 ];
 
-const DUMMY_BATCHES: PayoutBatchItem[] = [
+const BASE_BATCHES: PayoutBatchItem[] = [
   {
     id: "1",
     batchId: "PB-2026-09-30",
@@ -190,46 +190,7 @@ const DUMMY_BATCHES: PayoutBatchItem[] = [
   },
 ];
 
-const STATS_DATA: StatItem[] = [
-  {
-    title: "Gross Revenue",
-    value: "$58.6K",
-    change: "+8.6%",
-    isPositive: true,
-    subtext: "Last 30 days",
-    icon: DollarSign,
-    iconBg: "bg-indigo-50 text-indigo-600",
-  },
-  {
-    title: "Net Revenue",
-    value: "$49.5K",
-    change: "+7.9%",
-    isPositive: true,
-    subtext: "After fees, refunds & commission",
-    icon: TrendingUp,
-    iconBg: "bg-emerald-50 text-emerald-600",
-  },
-  {
-    title: "Units Sold",
-    value: "1,124",
-    change: "+9.2%",
-    isPositive: true,
-    subtext: "Across 892 orders",
-    icon: ShoppingBag,
-    iconBg: "bg-slate-100 text-slate-700",
-  },
-  {
-    title: "Avg Order Value",
-    value: "$65.74",
-    change: "+1.1%",
-    isPositive: true,
-    subtext: "Revenue per order",
-    icon: Tag,
-    iconBg: "bg-emerald-50 text-emerald-600",
-  },
-];
-
-const CATEGORY_DATA: CategoryPieItem[] = [
+const BASE_CATEGORY_DATA: CategoryPieItem[] = [
   { name: "Electronics", value: 42, amount: "$24.6K", color: "#4f46e5" },
   { name: "Fashion", value: 26, amount: "$15.2K", color: "#10b981" },
   { name: "Home & Living", value: 18, amount: "$10.6K", color: "#64748b" },
@@ -237,7 +198,7 @@ const CATEGORY_DATA: CategoryPieItem[] = [
   { name: "Others", value: 5, amount: "$2.9K", color: "#e2e8f0" },
 ];
 
-const CHART_DATA: ChartPoint[] = [
+const BASE_CHART_DATA: ChartPoint[] = [
   { month: "Aug 21", gross: 35, net: 28 },
   { month: "Aug 26", gross: 38, net: 30 },
   { month: "Aug 31", gross: 36, net: 29 },
@@ -247,9 +208,188 @@ const CHART_DATA: ChartPoint[] = [
   { month: "Sep 19", gross: 58.6, net: 49.5 },
 ];
 
+// Scale factor + chart point count per range, relative to the "30 days" base data
+const RANGE_CONFIG: Record<TimeRange, { scale: number; points: number }> = {
+  "7 days": { scale: 0.24, points: 4 },
+  "30 days": { scale: 1, points: 7 },
+  "90 days": { scale: 2.85, points: 9 },
+  "12 months": { scale: 10.4, points: 12 },
+};
+
+function scaleMoney(value: string, scale: number) {
+  const n = parseFloat(value.replace(/[^0-9.-]/g, ""));
+  const scaled = n * scale;
+  const sign = value.trim().startsWith("-") ? "-" : "";
+  return `${sign}$${Math.abs(scaled).toLocaleString("en-US", {
+    maximumFractionDigits: scaled < 1000 ? 1 : 0,
+  })}`;
+}
+
+function scaleCompact(value: string | undefined, scale: number) {
+  const n = parseFloat(value?.replace(/[^0-9.KkMm]/g, "") || "0");
+  const scaled = n * scale;
+  return `$${scaled.toFixed(1)}K`;
+}
+
+function buildProducts(scale: number): ProductRevenueItem[] {
+  return BASE_PRODUCTS.map((p) => ({
+    ...p,
+    units: Math.max(1, Math.round(p.units * scale)),
+    orders: Math.max(1, Math.round(p.orders * scale)),
+    gross: scaleMoney(p.gross, scale),
+    deductions: scaleMoney(p.deductions, scale),
+    netRevenue: scaleMoney(p.netRevenue, scale),
+  }));
+}
+
+function buildBatches(scale: number, range: TimeRange): PayoutBatchItem[] {
+  const count = range === "7 days" ? 2 : range === "30 days" ? 5 : range === "90 days" ? 6 : 8;
+  return BASE_BATCHES.slice(0, Math.min(count, BASE_BATCHES.length)).map((b) => ({
+    ...b,
+    orders: Math.max(1, Math.round(b.orders * scale)),
+    grossSales: scaleMoney(b.grossSales, scale),
+    deductions: scaleMoney(b.deductions, scale),
+    netPayout: scaleMoney(b.netPayout, scale),
+  }));
+}
+
+function buildCategoryData(scale: number): CategoryPieItem[] {
+  return BASE_CATEGORY_DATA.map((c) => ({
+    ...c,
+    amount: scaleCompact(c.amount, scale),
+  }));
+}
+
+function buildChartData(scale: number, points: number): ChartPoint[] {
+  const source = BASE_CHART_DATA;
+  const step = source.length / points;
+  const result: ChartPoint[] = [];
+  for (let i = 0; i < points; i++) {
+    const idx = Math.min(source.length - 1, Math.round(i * step));
+    const base = source[idx];
+    result.push({
+      month: base.month,
+      gross: Math.round(base.gross * scale * 10) / 10,
+      net: Math.round(base.net * scale * 10) / 10,
+    });
+  }
+  return result;
+}
+
+function buildStats(scale: number): StatItem[] {
+  const grossVal = 58.6 * scale;
+  const netVal = 49.5 * scale;
+  const unitsVal = Math.round(1124 * scale);
+  const ordersVal = Math.round(892 * scale);
+  const aov = ordersVal > 0 ? grossVal * 1000 / ordersVal : 0;
+
+  return [
+    {
+      title: "Gross Revenue",
+      value: `$${grossVal.toFixed(1)}K`,
+      change: "+8.6%",
+      isPositive: true,
+      subtext: "Selected period",
+      icon: DollarSign,
+      iconBg: "bg-indigo-50 text-indigo-600",
+    },
+    {
+      title: "Net Revenue",
+      value: `$${netVal.toFixed(1)}K`,
+      change: "+7.9%",
+      isPositive: true,
+      subtext: "After fees, refunds & commission",
+      icon: TrendingUp,
+      iconBg: "bg-emerald-50 text-emerald-600",
+    },
+    {
+      title: "Units Sold",
+      value: unitsVal.toLocaleString(),
+      change: "+9.2%",
+      isPositive: true,
+      subtext: `Across ${ordersVal.toLocaleString()} orders`,
+      icon: ShoppingBag,
+      iconBg: "bg-slate-100 text-slate-700",
+    },
+    {
+      title: "Avg Order Value",
+      value: `$${aov.toFixed(2)}`,
+      change: "+1.1%",
+      isPositive: true,
+      subtext: "Revenue per order",
+      icon: Tag,
+      iconBg: "bg-emerald-50 text-emerald-600",
+    },
+  ];
+}
+
+function downloadCsv(filename: string, csv: string) {
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.setAttribute("download", filename);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+function toCsvCell(value: string | number) {
+  const str = String(value);
+  return /[",\n]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str;
+}
+
 export default function SalesPage() {
   const [selectedRange, setSelectedRange] = useState<TimeRange>("30 days");
   const ranges: TimeRange[] = ["7 days", "30 days", "90 days", "12 months"];
+
+  const { scale, points } = RANGE_CONFIG[selectedRange];
+
+  const statsData = useMemo(() => buildStats(scale), [scale]);
+  const chartData = useMemo(() => buildChartData(scale, points), [scale, points]);
+  const categoryData = useMemo(() => buildCategoryData(scale), [scale]);
+  const products = useMemo(() => buildProducts(scale), [scale]);
+  const batches = useMemo(() => buildBatches(scale, selectedRange), [scale, selectedRange]);
+  const grossTotal = statsData[0].value;
+
+  function handleExport() {
+    const header = [
+      "Product",
+      "SKU",
+      "Category",
+      "Units",
+      "Orders",
+      "Gross",
+      "Deductions",
+      "Net Revenue",
+      "Rev Share",
+      "Trend",
+    ];
+
+    const rows = products.map((p) => [
+      p.name,
+      p.sku,
+      p.category,
+      p.units,
+      p.orders,
+      p.gross,
+      p.deductions,
+      p.netRevenue,
+      p.revShare,
+      p.trend,
+    ]);
+
+    const csv = [header, ...rows]
+      .map((row) => row.map(toCsvCell).join(","))
+      .join("\n");
+
+    const filename = `sales-report-${selectedRange.replace(" ", "-")}-${new Date()
+      .toISOString()
+      .slice(0, 10)}.csv`;
+
+    downloadCsv(filename, csv);
+  }
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
@@ -283,7 +423,10 @@ export default function SalesPage() {
               ))}
             </div>
 
-            <button className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition active:scale-95">
+            <button
+              onClick={handleExport}
+              className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-sm hover:bg-slate-50 transition active:scale-95 cursor-pointer"
+            >
               <Download className="h-4 w-4" />
               Export
             </button>
@@ -291,21 +434,21 @@ export default function SalesPage() {
         </div>
 
         {/* 1. Stat Cards */}
-        <SalesCards stats={STATS_DATA} />
+        <SalesCards stats={statsData} />
 
         {/* 2. Charts */}
         <SalesCharts
-          chartData={CHART_DATA}
-          categoryData={CATEGORY_DATA}
+          chartData={chartData}
+          categoryData={categoryData}
           timeRange={selectedRange}
-          grossTotal="$58.6K"
+          grossTotal={grossTotal}
         />
 
         {/* 3. Revenue Breakdown by Product */}
-        <RevenueBreakdown products={DUMMY_PRODUCTS} />
+        <RevenueBreakdown products={products} />
 
         {/* 4. Payout Reconciliation & Batches */}
-        <PayoutReconciliation batches={DUMMY_BATCHES} />
+        <PayoutReconciliation batches={batches} />
       </main>
     </div>
   );

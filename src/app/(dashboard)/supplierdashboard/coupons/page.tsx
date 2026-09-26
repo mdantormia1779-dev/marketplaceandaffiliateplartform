@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { CheckCircle2, Ticket, Timer } from "lucide-react";
-import Topbar from "./components/Topbar";
+import Navbar from "../components/Navbar";
 import PageHeader from "./components/PageHeader";
 import StatCard from "./components/StatCard";
 import RedemptionHealth from "./components/RedemptionHealth";
@@ -116,11 +116,7 @@ export default function CouponsPage() {
 
   return (
     <div className="min-h-screen bg-slate-50/70">
-      <Topbar
-        title="Coupons"
-        subtitle="Create and manage promotional coupon codes."
-        notificationCount={3}
-      />
+      <Navbar />
 
       <div className="mx-auto max-w-7xl space-y-6 px-4 py-6 sm:px-6 lg:px-8">
         <PageHeader

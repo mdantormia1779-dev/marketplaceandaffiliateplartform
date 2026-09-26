@@ -16,6 +16,7 @@ import {
 import type { PendingFilters } from "./pendingUtils";
 import { useNow } from "./useNow";
 
+import Navbar from "../../components/Navbar";
 import { PendingHeader } from "./components/PendingHeader";
 import { PendingSummaryCards } from "./components/PendingSummaryCards";
 import { PendingToolbar } from "./components/PendingToolbar";
@@ -95,6 +96,8 @@ export default function PendingOrdersPage() {
 
   return (
     <div className="min-h-screen bg-slate-50">
+      <Navbar />
+
       <div className="mx-auto max-w-7xl px-4 py-6 pb-28 sm:px-8">
         <PendingHeader
           pendingCount={pending.length}

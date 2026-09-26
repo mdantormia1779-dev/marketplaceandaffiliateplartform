@@ -1,19 +1,65 @@
 // src/app/(dashboard)/supplierdashboard/reports/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import Navbar from "../../components/Navbar";
 import ReportsSummaryCards, { SummaryCard } from "../../components/ReportsSummaryCards";
 import ReportsTable, { TableRowItem } from "../../components/ReportsTable";
-import { Calendar, DollarSign, TrendingUp, ShoppingBag, Tag } from "lucide-react";
+import { Calendar, DollarSign, TrendingUp, ShoppingBag, Tag, Check, X } from "lucide-react";
 
 type TimeRange = "7 days" | "30 days" | "90 days" | "12 months";
 type ReportTab = "Sales Report" | "Orders Report" | "Affiliate Report";
+type ScheduleFrequency = "Daily" | "Weekly" | "Monthly";
+
+type ScheduleConfig = {
+  enabled: boolean;
+  frequency: ScheduleFrequency;
+  email: string;
+};
 
 export default function ReportsPage() {
   const [selectedRange, setSelectedRange] = useState<TimeRange>("30 days");
   const [activeTab, setActiveTab] = useState<ReportTab>("Sales Report");
+
+  /* ------------------------------ Schedule ------------------------------ */
+  const [scheduleOpen, setScheduleOpen] = useState(false);
+  const [schedule, setSchedule] = useState<ScheduleConfig>({
+    enabled: false,
+    frequency: "Weekly",
+    email: "",
+  });
+  const [draftFrequency, setDraftFrequency] = useState<ScheduleFrequency>(schedule.frequency);
+  const [draftEmail, setDraftEmail] = useState(schedule.email);
+  const [emailError, setEmailError] = useState("");
+  const scheduleRef = useRef<HTMLDivElement>(null);
+
+  const openSchedule = () => {
+    setDraftFrequency(schedule.frequency);
+    setDraftEmail(schedule.email);
+    setEmailError("");
+    setScheduleOpen((v) => !v);
+  };
+
+  const saveSchedule = () => {
+    const email = draftEmail.trim();
+    if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+      setEmailError("Enter a valid email to receive the report.");
+      return;
+    }
+    setSchedule({ enabled: true, frequency: draftFrequency, email });
+    setScheduleOpen(false);
+  };
+
+  const cancelSchedule = () => {
+    setScheduleOpen(false);
+    setEmailError("");
+  };
+
+  const turnOffSchedule = () => {
+    setSchedule((s) => ({ ...s, enabled: false }));
+    setScheduleOpen(false);
+  };
 
   // Dynamic Summary Data based on selected time range
   const summaryDataMap: Record<TimeRange, SummaryCard[]> = {
@@ -99,9 +145,106 @@ export default function ReportsPage() {
                 ))}
               </div>
 
-              <button className="flex items-center gap-2 px-3.5 py-2 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-xs font-bold transition-all cursor-pointer">
-                <Calendar className="w-4 h-4 text-slate-500" /> Schedule
-              </button>
+              {/* Schedule (now dynamic) */}
+              <div className="relative" ref={scheduleRef}>
+                <button
+                  onClick={openSchedule}
+                  className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer border ${
+                    schedule.enabled
+                      ? "border-emerald-200 bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                      : "border-slate-200 hover:bg-slate-50 text-slate-700"
+                  }`}
+                >
+                  <Calendar className={`w-4 h-4 ${schedule.enabled ? "text-emerald-600" : "text-slate-500"}`} />
+                  {schedule.enabled ? `Scheduled · ${schedule.frequency}` : "Schedule"}
+                </button>
+
+                {scheduleOpen && (
+                  <div className="absolute right-0 z-10 mt-2 w-72 rounded-2xl border border-slate-200 bg-white p-4 shadow-lg">
+                    <div className="mb-3 flex items-center justify-between">
+                      <p className="text-xs font-bold text-slate-900">Schedule this report</p>
+                      <button
+                        onClick={cancelSchedule}
+                        aria-label="Close"
+                        className="text-slate-400 hover:text-slate-600"
+                      >
+                        <X className="h-3.5 w-3.5" />
+                      </button>
+                    </div>
+
+                    <div className="space-y-3">
+                      <div>
+                        <label className="mb-1.5 block text-[11px] font-semibold text-slate-600">Frequency</label>
+                        <div className="grid grid-cols-3 gap-1.5">
+                          {(["Daily", "Weekly", "Monthly"] as ScheduleFrequency[]).map((f) => (
+                            <button
+                              key={f}
+                              onClick={() => setDraftFrequency(f)}
+                              className={`rounded-lg px-2 py-1.5 text-[11px] font-bold transition-all ${
+                                draftFrequency === f
+                                  ? "bg-indigo-600 text-white"
+                                  : "bg-slate-100 text-slate-600 hover:bg-slate-200"
+                              }`}
+                            >
+                              {f}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <label htmlFor="schedule-email" className="mb-1.5 block text-[11px] font-semibold text-slate-600">
+                          Send to
+                        </label>
+                        <input
+                          id="schedule-email"
+                          type="email"
+                          value={draftEmail}
+                          onChange={(e) => {
+                            setDraftEmail(e.target.value);
+                            if (emailError) setEmailError("");
+                          }}
+                          placeholder="you@store.com"
+                          className={`h-9 w-full rounded-lg border px-3 text-xs text-slate-900 outline-none transition focus:ring-2 ${
+                            emailError
+                              ? "border-red-400 focus:border-red-500 focus:ring-red-100"
+                              : "border-slate-200 focus:border-indigo-500 focus:ring-indigo-100"
+                          }`}
+                        />
+                        {emailError && <p className="mt-1 text-[10px] text-red-600">{emailError}</p>}
+                      </div>
+                    </div>
+
+                    <div className="mt-4 flex items-center justify-between gap-2">
+                      {schedule.enabled ? (
+                        <button
+                          onClick={turnOffSchedule}
+                          className="text-[11px] font-bold text-rose-600 hover:text-rose-700"
+                        >
+                          Turn off
+                        </button>
+                      ) : (
+                        <span />
+                      )}
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={cancelSchedule}
+                          className="rounded-lg px-3 py-1.5 text-[11px] font-bold text-slate-600 hover:bg-slate-100"
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={saveSchedule}
+                          className="flex items-center gap-1 rounded-lg bg-indigo-600 px-3 py-1.5 text-[11px] font-bold text-white hover:bg-indigo-700"
+                        >
+                          <Check className="h-3 w-3" />
+                          Save
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 

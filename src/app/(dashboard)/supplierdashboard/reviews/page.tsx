@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
+import Navbar from "@/app/(dashboard)/supplierdashboard/components/Navbar";
 
 import {
   ActiveFilter,
@@ -59,9 +61,25 @@ export default function ReviewsPage() {
   const totalPages = getTotalPages(filtered.length, PAGE_SIZE);
   const paged = useMemo(() => paginate(filtered, page, PAGE_SIZE), [filtered, page]);
 
-  useEffect(() => {
+  const handleActiveFilterChange = (value: ActiveFilter) => {
     setPage(1);
-  }, [activeFilter, productFilter, query, sort]);
+    setActiveFilter(value);
+  };
+
+  const handleProductFilterChange = (value: ProductFilterValue) => {
+    setPage(1);
+    setProductFilter(value);
+  };
+
+  const handleQueryChange = (value: string) => {
+    setPage(1);
+    setQuery(value);
+  };
+
+  const handleSortChange = (value: SortOption) => {
+    setPage(1);
+    setSort(value);
+  };
 
   const handleOpenReply = (id: string) => {
     setOpenFormId(id);
@@ -135,50 +153,54 @@ export default function ReviewsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 px-4 py-6 sm:px-8">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-6 flex flex-col gap-1">
-          <h1 className="text-2xl font-semibold text-slate-900">Reviews</h1>
-          <p className="text-sm text-slate-500">
-            See what customers are saying about your products and respond to feedback.
-          </p>
+    <div className="min-h-screen bg-slate-50">
+      <Navbar />
+
+      <div className="px-4 py-6 sm:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="mb-6 flex flex-col gap-1">
+            <h1 className="text-2xl font-semibold text-slate-900">Reviews</h1>
+            <p className="text-sm text-slate-500">
+              See what customers are saying about your products and respond to feedback.
+            </p>
+          </div>
+
+          <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
+            <OverallRatingCard average={average} total={reviews.length - hiddenCount} />
+            <RatingBreakdownCard breakdown={breakdown} onSelectStar={handleActiveFilterChange} />
+            <ResponseRateCard responseRate={responseRate} unansweredCount={unansweredCount} />
+          </div>
+
+          <ReviewFilters
+            activeFilter={activeFilter}
+            onFilterChange={handleActiveFilterChange}
+            productFilter={productFilter}
+            onProductFilterChange={handleProductFilterChange}
+            products={products}
+            query={query}
+            onQueryChange={handleQueryChange}
+            sort={sort}
+            onSortChange={handleSortChange}
+            unansweredCount={unansweredCount}
+            flaggedCount={flaggedCount}
+            hiddenCount={hiddenCount}
+          />
+
+          <ReviewList
+            reviews={paged}
+            openFormId={openFormId}
+            formMode={formMode}
+            onOpenReply={handleOpenReply}
+            onOpenEditReply={handleOpenEditReply}
+            onCancelForm={handleCancelForm}
+            onSubmitReply={handleSubmitReply}
+            onDeleteReply={handleDeleteReply}
+            onToggleFlag={handleToggleFlag}
+            onToggleHide={handleToggleHide}
+          />
+
+          <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
         </div>
-
-        <div className="mb-6 grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <OverallRatingCard average={average} total={reviews.length - hiddenCount} />
-          <RatingBreakdownCard breakdown={breakdown} onSelectStar={setActiveFilter} />
-          <ResponseRateCard responseRate={responseRate} unansweredCount={unansweredCount} />
-        </div>
-
-        <ReviewFilters
-          activeFilter={activeFilter}
-          onFilterChange={setActiveFilter}
-          productFilter={productFilter}
-          onProductFilterChange={setProductFilter}
-          products={products}
-          query={query}
-          onQueryChange={setQuery}
-          sort={sort}
-          onSortChange={setSort}
-          unansweredCount={unansweredCount}
-          flaggedCount={flaggedCount}
-          hiddenCount={hiddenCount}
-        />
-
-        <ReviewList
-          reviews={paged}
-          openFormId={openFormId}
-          formMode={formMode}
-          onOpenReply={handleOpenReply}
-          onOpenEditReply={handleOpenEditReply}
-          onCancelForm={handleCancelForm}
-          onSubmitReply={handleSubmitReply}
-          onDeleteReply={handleDeleteReply}
-          onToggleFlag={handleToggleFlag}
-          onToggleHide={handleToggleHide}
-        />
-
-        <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
       </div>
 
       <ToastContainer position="top-right" autoClose={2500} theme="light" />

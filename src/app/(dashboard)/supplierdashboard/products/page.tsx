@@ -26,7 +26,7 @@ import {
   X,
   type LucideIcon,
 } from "lucide-react";
-import TopBar from "@/app/(dashboard)/supplierdashboard/components/TopBar";
+import Navbar from "@/app/(dashboard)/supplierdashboard/components/Navbar";
 import {
   CATEGORIES,
   useProducts,
@@ -229,7 +229,7 @@ function ProductsView() {
 
   return (
     <div className="min-h-screen bg-slate-50 text-slate-900">
-      <TopBar title="All Products" subtitle="Manage your catalog, pricing and publishing status." />
+      <Navbar />
 
       <main className="space-y-4 p-6 lg:p-10">
         {notice && (
@@ -500,7 +500,6 @@ function ProductsView() {
   );
 }
 
-// useSearchParams ke Suspense er bhitore rakhte hoy (Next.js App Router)
 export default function ProductsPage() {
   return (
     <Suspense fallback={null}>
