@@ -1,3 +1,4 @@
+"use client";
 import {
   MousePointerClick,
   ShoppingCart,
@@ -8,8 +9,11 @@ import {
   ArrowDownToLine,
 } from "lucide-react";
 import StatCard from "./StatCard";
+import { useRouter } from "next/navigation";
+
 
 export default function StatsGrid() {
+      const router = useRouter();
   return (
     <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
       <StatCard
@@ -72,7 +76,8 @@ export default function StatsGrid() {
         change="ready to withdraw"
         changeLabel=""
         action={
-          <button className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-indigo-600 py-1.5 text-xs font-medium text-white hover:bg-indigo-700">
+          <button onClick={() => router.push("/affiliatedashboard/withdrawals")}
+ className="flex w-full items-center justify-center gap-1.5 rounded-lg bg-indigo-600 py-1.5 text-xs font-medium text-white hover:bg-indigo-700">
             <ArrowDownToLine className="h-3.5 w-3.5" />
             Withdraw
           </button>
