@@ -63,7 +63,7 @@ const SIDEBAR_GROUPS: MenuGroup[] = [
     items: [
       {
         label: "Products",
-        href: "/affiliatedashboard/affiliate-products",
+        href: "/affiliatedashboard/products",
         icon: Store,
         children: [
           {
@@ -82,7 +82,6 @@ const SIDEBAR_GROUPS: MenuGroup[] = [
             label: "All Links",
             href: "/affiliatedashboard/all-links",
           },
-         
         ],
       },
     ],
@@ -212,9 +211,7 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         isOpen ? "translate-x-0" : "-translate-x-full"
       }`}
     >
-      {/* =====================================================
-          BRAND HEADER
-      ====================================================== */}
+      {/* BRAND HEADER */}
       <div className="flex shrink-0 items-center justify-between px-5 pb-3 pt-5">
         <Link href="/affiliatedashboard" className="flex items-center gap-3">
           <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#4f46e5] text-white shadow-md">
@@ -242,13 +239,10 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         </button>
       </div>
 
-      {/* =====================================================
-          NAVIGATION
-      ====================================================== */}
+      {/* NAVIGATION */}
       <nav className="flex-1 overflow-y-auto px-3.5 pb-6">
         {SIDEBAR_GROUPS.map((group) => (
           <div key={group.label} className="pt-4">
-            {/* Group title */}
             <p className="mb-2 px-3 text-[11px] font-bold uppercase tracking-wider text-slate-400">
               {group.label}
             </p>
@@ -267,9 +261,6 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
 
                 return (
                   <li key={item.label}>
-                    {/* =================================================
-                        MENU WITH CHILDREN
-                    ================================================== */}
                     {hasChildren ? (
                       <>
                         <button
@@ -281,24 +272,20 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                               : "text-slate-600 hover:bg-slate-100/80 hover:text-slate-900"
                           }`}
                         >
-                          {/* Icon */}
                           <Icon
                             className={`h-4 w-4 shrink-0 ${
                               active ? "text-white" : "text-slate-500"
                             }`}
                           />
 
-                          {/* Label */}
                           <span className="flex-1 truncate">
                             {item.label}
                           </span>
 
-                          {/* Badge */}
                           {item.badge !== undefined && (
                             <SidebarBadge value={item.badge} />
                           )}
 
-                          {/* Arrow */}
                           {isOpen ? (
                             <ChevronDown
                               className={`h-4 w-4 ${
@@ -314,9 +301,6 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                           )}
                         </button>
 
-                        {/* =================================================
-                            SUBMENU
-                        ================================================== */}
                         <div
                           className={`grid transition-[grid-template-rows] duration-200 ease-out ${
                             isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
@@ -348,9 +332,6 @@ export default function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                         </div>
                       </>
                     ) : (
-                      /* =================================================
-                         NORMAL MENU ITEM
-                      ================================================== */
                       <Link
                         href={item.href || "#"}
                         onClick={onClose}
