@@ -79,12 +79,9 @@ const SIDEBAR_GROUPS: MenuGroup[] = [
         children: [
           {
             label: "All Links",
-            href: "/affiliatedashboard/links",
+            href: "/affiliatedashboard/all-links",
           },
-          {
-            label: "Generate Link",
-            href: "/affiliatedashboard/links/generate",
-          },
+         
         ],
       },
     ],
