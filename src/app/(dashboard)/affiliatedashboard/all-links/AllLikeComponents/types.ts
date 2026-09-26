@@ -1,4 +1,4 @@
-export type LinkStatus = "Active" | "Paused";
+export type LinkStatus = "Active" | "Paused" | "Expired";
 
 export type AffiliateLink = {
   id: string;
@@ -13,3 +13,7 @@ export type AffiliateLink = {
   commission: number;
   status: LinkStatus;
 };
+
+export type StatusFilter = "All" | LinkStatus;
+
+export type SortOption = "newest" | "oldest" | "mostClicks" | "highestCommission";

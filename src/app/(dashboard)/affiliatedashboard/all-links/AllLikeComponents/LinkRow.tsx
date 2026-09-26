@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Check, Copy as CopyIcon } from "lucide-react";
 import StatusBadge from "./StatusBadge";
 import LinkRowActions from "./LinkRowActions";
@@ -18,9 +19,14 @@ type LinkRowProps = {
 };
 
 export default function LinkRow({ link, onDelete }: LinkRowProps) {
+  const router = useRouter();
   const [copied, setCopied] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const handleViewStats = () => {
+    router.push("/affiliatedashboard/analytics");
+  };
 
   const handleCopy = async () => {
     await navigator.clipboard.writeText(link.affiliateUrl);
@@ -36,6 +42,7 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
   return (
     <>
       <tr className="border-b border-gray-100 last:border-0">
+        {/* Product */}
         <td className="whitespace-nowrap px-4 py-4">
           <div className="flex items-center gap-3">
             <img
@@ -52,6 +59,7 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
           </div>
         </td>
 
+        {/* Affiliate link */}
         <td className="px-4 py-4">
           <button
             onClick={handleCopy}
@@ -66,34 +74,42 @@ export default function LinkRow({ link, onDelete }: LinkRowProps) {
           </button>
         </td>
 
+        {/* Created */}
         <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-600">
           {link.createdAt}
         </td>
 
+        {/* Clicks */}
         <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-900">
           {link.clicks.toLocaleString()}
         </td>
 
+        {/* Sales */}
         <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-900">
           {link.sales}
         </td>
 
+        {/* Conversion */}
         <td className="whitespace-nowrap px-4 py-4 text-sm text-gray-900">
           {link.conversionPercent}%
         </td>
 
+        {/* Commission */}
         <td className="whitespace-nowrap px-4 py-4 text-sm font-semibold text-indigo-600">
           ৳{link.commission.toLocaleString()}
         </td>
 
+        {/* Status */}
         <td className="whitespace-nowrap px-4 py-4">
           <StatusBadge status={link.status} />
         </td>
 
+        {/* Actions */}
         <td className="whitespace-nowrap px-4 py-4">
           <LinkRowActions
             onCopy={handleCopy}
             onShare={() => setShareOpen(true)}
+            onViewStats={handleViewStats}
             onDelete={() => setDeleteOpen(true)}
           />
         </td>
