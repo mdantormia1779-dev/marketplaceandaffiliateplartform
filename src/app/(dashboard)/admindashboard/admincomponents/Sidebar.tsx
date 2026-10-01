@@ -36,10 +36,10 @@ const groups: Group[] = [
     title: "Marketplace",
     items: [
       { label: "Products", href: `${base}/products`, icon: Package },
-      { label: "Categories", href: `${base}/categories`, icon: Grid2x2 },
-      { label: "Brands", href: `${base}/brands`, icon: Tag },
-      { label: "Reviews", href: `${base}/reviews`, icon: Star },
-      { label: "Featured Products", href: `${base}/featured`, icon: Sparkles },
+      { label: "Categories", href: `${base}/MARKETPLACE/categories`, icon: Grid2x2 },
+      { label: "Brands", href: `${base}/MARKETPLACE/brands`, icon: Tag },
+      { label: "Reviews", href: `${base}/MARKETPLACE/reviews`, icon: Star },
+      { label: "Featured Products", href: `${base}/MARKETPLACE/featured`, icon: Sparkles },
     ],
   },
 ];
