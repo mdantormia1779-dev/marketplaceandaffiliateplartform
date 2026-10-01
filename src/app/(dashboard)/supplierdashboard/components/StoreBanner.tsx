@@ -6,8 +6,8 @@ import {
   Package,
   Users,
   ExternalLink,
-  Plus,
 } from "lucide-react";
+import Link from "next/link";
 import { useSyncExternalStore } from "react";
 
 type ProfileData = {
@@ -27,56 +27,6 @@ const defaultProfile: ProfileData = {
 /* =========================================================
    PROFILE STORAGE
 ========================================================= */
-
-const getProfile = (): ProfileData => {
-  if (typeof window === "undefined") {
-    return defaultProfile;
-  }
-
-  try {
-    const saved = localStorage.getItem("supplier-profile");
-
-    if (!saved) {
-      return defaultProfile;
-    }
-
-    const parsed: unknown = JSON.parse(saved);
-
-    if (
-      typeof parsed !== "object" ||
-      parsed === null ||
-      Array.isArray(parsed)
-    ) {
-      return defaultProfile;
-    }
-
-    const data = parsed as Partial<ProfileData>;
-
-    return {
-      name:
-        typeof data.name === "string" && data.name.trim()
-          ? data.name
-          : defaultProfile.name,
-
-      email:
-        typeof data.email === "string" && data.email.trim()
-          ? data.email
-          : defaultProfile.email,
-
-      phone:
-        typeof data.phone === "string" && data.phone.trim()
-          ? data.phone
-          : defaultProfile.phone,
-
-      storeName:
-        typeof data.storeName === "string" && data.storeName.trim()
-          ? data.storeName
-          : defaultProfile.storeName,
-    };
-  } catch {
-    return defaultProfile;
-  }
-};
 
 /* =========================================================
    EXTERNAL STORE
@@ -226,30 +176,15 @@ const StoreBanner = () => {
 
       <div className="flex items-center gap-3">
         {/* View Store */}
-        <button
-          type="button"
-          onClick={() =>
-            window.open("https://example.com", "_blank")
-          }
-          className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-semibold text-slate-700 hover:bg-slate-50 transition shadow-sm active:scale-95"
-        >
-          <ExternalLink className="w-4 h-4" />
-
-          View Store
-        </button>
-
-        {/* Add Product */}
-        <button
-          type="button"
-          onClick={() => alert("Open Add Product Modal")}
-          className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-700 transition shadow-sm active:scale-95"
-        >
-          <Plus className="w-4 h-4" />
-
-          Add Product
-        </button>
+          <Link
+            href="/products"
+            className="flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:bg-slate-50 active:scale-95"
+          >
+            <ExternalLink className="h-4 w-4" />
+            View Store
+          </Link>
+        </div>
       </div>
-    </div>
   );
 };
 
