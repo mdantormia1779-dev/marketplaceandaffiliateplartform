@@ -29,9 +29,10 @@ const groups: Group[] = [
   {
     title: "Users",
     items: [
-      { label: "Customers", href: `${base}/customers`, icon: Users },
-      { label: "Affiliates", href: `${base}/affiliates`, icon: Share2 },
-      { label: "Staff", href: `${base}/staff`, icon: UserCog },
+      
+      { label: "Customers", href: `${base}/users/customers`, icon: Users },
+      { label: "Affiliates", href: `${base}/users/affiliates`, icon: Share2 },
+      { label: "Staff", href: `${base}/users/staff`, icon: UserCog },
     ],
   },
   {
@@ -48,10 +49,10 @@ const groups: Group[] = [
     title: "Marketplace",
     items: [
       { label: "Products", href: `${base}/products`, icon: Package },
-      { label: "Categories", href: `${base}/categories`, icon: Grid2x2 },
-      { label: "Brands", href: `${base}/brands`, icon: Tag },
-      { label: "Reviews", href: `${base}/reviews`, icon: Star },
-      { label: "Featured Products", href: `${base}/featured`, icon: Sparkles },
+      { label: "Categories", href: `${base}/MARKETPLACE/categories`, icon: Grid2x2 },
+      { label: "Brands", href: `${base}/MARKETPLACE/brands`, icon: Tag },
+      { label: "Reviews", href: `${base}/MARKETPLACE/reviews`, icon: Star },
+      { label: "Featured Products", href: `${base}/MARKETPLACE/featured`, icon: Sparkles },
     ],
   },
   {
