@@ -3,9 +3,23 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  LayoutGrid, Users, Share2, UserCog, Truck, ClipboardCheck, CreditCard,
-  BadgeDollarSign, Network, Package, Grid2x2, Tag, Star, Sparkles,
-  ChevronDown, Store, type LucideIcon,
+  LayoutGrid,
+  Users,
+  Share2,
+  UserCog,
+  Truck,
+  ClipboardCheck,
+  CreditCard,
+  BadgeDollarSign,
+  Network,
+  Package,
+  Grid2x2,
+  Tag,
+  Star,
+  Sparkles,
+  ChevronDown,
+  Store,
+  type LucideIcon,
 } from "lucide-react";
 
 type Item = { label: string; href: string; icon: LucideIcon };
@@ -17,9 +31,10 @@ const groups: Group[] = [
   {
     title: "Users",
     items: [
-      { label: "Customers", href: `${base}/customers`, icon: Users },
-      { label: "Affiliates", href: `${base}/affiliates`, icon: Share2 },
-      { label: "Staff", href: `${base}/staff`, icon: UserCog },
+      
+      { label: "Customers", href: `${base}/users/customers`, icon: Users },
+      { label: "Affiliates", href: `${base}/users/affiliates`, icon: Share2 },
+      { label: "Staff", href: `${base}/users/staff`, icon: UserCog },
     ],
   },
   {
