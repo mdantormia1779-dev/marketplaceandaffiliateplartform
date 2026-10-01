@@ -3,23 +3,21 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  LayoutGrid,
-  Users,
-  Share2,
-  UserCog,
-  Truck,
-  ClipboardCheck,
-  CreditCard,
-  BadgeDollarSign,
-  Network,
-  Package,
-  Grid2x2,
-  Tag,
-  Star,
-  Sparkles,
-  ChevronDown,
-  Store,
-  type LucideIcon,
+  LayoutGrid, Users, Share2, UserCog, Truck, ClipboardCheck, CreditCard,
+  BadgeDollarSign, Network, Package, Grid2x2, Tag, Star, Sparkles,
+  ChevronDown, Store, type LucideIcon,
+  Clock,
+  RefreshCw,
+  ShoppingBag,
+  CheckCircle,
+  XCircle,
+  RotateCcw,
+  MousePointer,
+  TrendingUp,
+  DollarSign,
+  Gift,
+  UserPlus,
+  Link as LinkIcon, // 👈 এখানে নাম পরিবর্তন (Alias) করা হয়েছে
 } from "lucide-react";
 
 type Item = { label: string; href: string; icon: LucideIcon };
@@ -55,6 +53,30 @@ const groups: Group[] = [
       { label: "Brands", href: `${base}/MARKETPLACE/brands`, icon: Tag },
       { label: "Reviews", href: `${base}/MARKETPLACE/reviews`, icon: Star },
       { label: "Featured Products", href: `${base}/MARKETPLACE/featured`, icon: Sparkles },
+    ],
+  },
+  {
+    title: "Orders",
+    items: [
+      { label: "All Orders", href: `${base}/all-orders`, icon: ShoppingBag },
+      { label: "Pending", href: `${base}/pending-orders`, icon: Clock },
+      { label: "Processing", href: `${base}/processing-orders`, icon: RefreshCw },
+      { label: "Shipped", href: `${base}/shipped-orders`, icon: Truck },
+      { label: "Delivered", href: `${base}/delivered-orders`, icon: CheckCircle },
+      { label: "Cancelled", href: `${base}/cancelled-orders`, icon: XCircle },
+      { label: "Refunds", href: `${base}/refunds`, icon: RotateCcw },
+    ],
+  },
+  {
+    title: "Affiliate",
+    items: [
+      { label: "Affiliates", href: `${base}/affiliates`, icon: Users },
+      { label: "Links", href: `${base}/affiliate-links`, icon: LinkIcon }, // 👈 LinkIcon ব্যবহার করা হয়েছে
+      { label: "Clicks", href: `${base}/affiliate-clicks`, icon: MousePointer },
+      { label: "Conversions", href: `${base}/affiliate-conversions`, icon: TrendingUp },
+      { label: "Commissions", href: `${base}/affiliate-commissions`, icon: DollarSign },
+      { label: "Bonuses", href: `${base}/affiliate-bonuses`, icon: Gift },
+      { label: "Referrals", href: `${base}/affiliate-referrals`, icon: UserPlus },
     ],
   },
 ];
