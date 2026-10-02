@@ -3,9 +3,22 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  LayoutGrid, Users, Share2, UserCog, Truck, ClipboardCheck, CreditCard,
-  BadgeDollarSign, Network, Package, Grid2x2, Tag, Star, Sparkles,
-  ChevronDown, Store, type LucideIcon,
+  LayoutGrid,
+  Users,
+  Share2,
+  UserCog,
+  Truck,
+  ClipboardCheck,
+  CreditCard,
+  BadgeDollarSign,
+  Network,
+  Package,
+  Grid2x2,
+  Tag,
+  Star,
+  Sparkles,
+  ChevronDown,
+  Store,
   Clock,
   RefreshCw,
   ShoppingBag,
@@ -17,7 +30,21 @@ import {
   DollarSign,
   Gift,
   UserPlus,
-  Link as LinkIcon, // 👈 এখানে নাম পরিবর্তন (Alias) করা হয়েছে
+  Link as LinkIcon,
+  ArrowLeftRight,
+  Wallet,
+  Banknote,
+  Megaphone,
+  Ticket,
+  Zap,
+  Image as ImageIcon,
+  BarChart3,
+  LineChart,
+  UserCheck,
+  Percent,
+  Award,
+  Settings,
+  type LucideIcon,
 } from "lucide-react";
 
 type Item = { label: string; href: string; icon: LucideIcon };
@@ -29,7 +56,6 @@ const groups: Group[] = [
   {
     title: "Users",
     items: [
-      
       { label: "Customers", href: `${base}/users/customers`, icon: Users },
       { label: "Affiliates", href: `${base}/users/affiliates`, icon: Share2 },
       { label: "Staff", href: `${base}/users/staff`, icon: UserCog },
@@ -49,10 +75,10 @@ const groups: Group[] = [
     title: "Marketplace",
     items: [
       { label: "Products", href: `${base}/products`, icon: Package },
-      { label: "Categories", href: `${base}/MARKETPLACE/categories`, icon: Grid2x2 },
-      { label: "Brands", href: `${base}/MARKETPLACE/brands`, icon: Tag },
-      { label: "Reviews", href: `${base}/MARKETPLACE/reviews`, icon: Star },
-      { label: "Featured Products", href: `${base}/MARKETPLACE/featured`, icon: Sparkles },
+      { label: "Categories", href: `${base}/marketplace/categories`, icon: Grid2x2 },
+      { label: "Brands", href: `${base}/marketplace/brands`, icon: Tag },
+      { label: "Reviews", href: `${base}/marketplace/reviews`, icon: Star },
+      { label: "Featured Products", href: `${base}/marketplace/featured`, icon: Sparkles },
     ],
   },
   {
@@ -71,12 +97,54 @@ const groups: Group[] = [
     title: "Affiliate",
     items: [
       { label: "Affiliates", href: `${base}/affiliates`, icon: Users },
-      { label: "Links", href: `${base}/affiliate-links`, icon: LinkIcon }, // 👈 LinkIcon ব্যবহার করা হয়েছে
+      { label: "Links", href: `${base}/affiliate-links`, icon: LinkIcon },
       { label: "Clicks", href: `${base}/affiliate-clicks`, icon: MousePointer },
       { label: "Conversions", href: `${base}/affiliate-conversions`, icon: TrendingUp },
       { label: "Commissions", href: `${base}/affiliate-commissions`, icon: DollarSign },
       { label: "Bonuses", href: `${base}/affiliate-bonuses`, icon: Gift },
       { label: "Referrals", href: `${base}/affiliate-referrals`, icon: UserPlus },
+    ],
+  },
+  {
+    title: "Finance",
+    items: [
+      { label: "Revenue", href: `${base}/revenue`, icon: DollarSign },
+      { label: "Transactions", href: `${base}/transactions`, icon: ArrowLeftRight },
+      { label: "Wallets", href: `${base}/wallets`, icon: Wallet },
+      { label: "Withdrawals", href: `${base}/withdrawals`, icon: Banknote },
+      { label: "Refunds", href: `${base}/finance-refunds`, icon: RotateCcw },
+    ],
+  },
+  {
+    title: "Marketing",
+    items: [
+      { label: "Campaigns", href: `${base}/campaigns`, icon: Megaphone },
+      { label: "Coupons", href: `${base}/coupons`, icon: Ticket },
+      { label: "Discounts", href: `${base}/discounts`, icon: Tag },
+      { label: "Flash Sales", href: `${base}/flash-sales`, icon: Zap },
+      { label: "Banners", href: `${base}/banners`, icon: ImageIcon },
+    ],
+  },
+  {
+    title: "Reports",
+    items: [
+      { label: "Sales", href: `${base}/sales-reports`, icon: BarChart3 },
+      { label: "Revenue", href: `${base}/revenue-reports`, icon: LineChart },
+      { label: "Affiliate", href: `${base}/affiliate-reports`, icon: Users },
+      { label: "Supplier", href: `${base}/supplier-reports`, icon: Truck },
+      { label: "Customer", href: `${base}/customer-reports`, icon: UserCheck },
+    ],
+  },
+  {
+    title: "Settings",
+    items: [
+      { label: "Commission", href: `${base}/settings/commission`, icon: Percent },
+      { label: "Subscription", href: `${base}/settings/subscription`, icon: CreditCard },
+      { label: "Joining Fee", href: `${base}/settings/joining-fee`, icon: DollarSign },
+      { label: "Referral", href: `${base}/settings/referral`, icon: UserPlus },
+      { label: "Bonus", href: `${base}/settings/bonus`, icon: Award },
+      { label: "Payment", href: `${base}/settings/payment`, icon: CreditCard },
+      { label: "General Settings", href: `${base}/settings/general`, icon: Settings },
     ],
   },
 ];
@@ -86,6 +154,7 @@ function NavGroup({ group }: { group: Group }) {
   return (
     <div className="mt-5">
       <button
+        type="button"
         onClick={() => setOpen(!open)}
         className="flex w-full items-center justify-between px-3 pb-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500"
       >

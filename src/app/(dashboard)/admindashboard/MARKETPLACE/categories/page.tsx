@@ -6,8 +6,9 @@ import CategoriesToolbar from "./CategoriesToolbar";
 import CategoryStats from "./CategoryStats";
 import CreateCategoryModal from "./CreateCategoryModal";
 import Pagination from "../components/Pagination";
-import { exportCsv } from "./exportCsv";
+
 import { useCategories } from "./useCategories";
+import { exportCsv } from "./exportCsv";
 
 export default function CategoriesPage() {
   const c = useCategories();
