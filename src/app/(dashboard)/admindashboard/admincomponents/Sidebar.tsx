@@ -64,11 +64,11 @@ const groups: Group[] = [
   {
     title: "Suppliers",
     items: [
-      { label: "Supplier List", href: `${base}/suppliers`, icon: Truck },
-      { label: "Approvals", href: `${base}/approvals`, icon: ClipboardCheck },
-      { label: "Subscriptions", href: `${base}/subscriptions`, icon: CreditCard },
-      { label: "Joining Fees", href: `${base}/joining-fees`, icon: BadgeDollarSign },
-      { label: "Supplier Referrals", href: `${base}/supplier-referrals`, icon: Network },
+     { label: "Supplier List", href: `${base}/supplier/suppliers`, icon: Truck },
+{ label: "Approvals", href: `${base}/supplier/approvals`, icon: ClipboardCheck },
+{ label: "Subscriptions", href: `${base}/supplier/subscriptions`, icon: CreditCard },
+{ label: "Joining Fees", href: `${base}/supplier/joining-fees`, icon: BadgeDollarSign },
+{ label: "Supplier Referrals", href: `${base}/supplier/supplier-referrals`, icon: Network },
     ],
   },
   {
