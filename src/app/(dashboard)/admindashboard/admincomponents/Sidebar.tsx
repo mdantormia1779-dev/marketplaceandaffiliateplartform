@@ -182,7 +182,7 @@ function NavGroup({ group }: { group: Group }) {
 
 export default function Sidebar() {
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex">
+    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-slate-200 bg-white">
       <div className="flex h-[68px] items-center gap-3 border-b border-slate-200 px-4">
         <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#1fa85a] text-white">
           <Store className="h-5 w-5" />
