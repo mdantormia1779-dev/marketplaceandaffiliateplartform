@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { INITIAL_FEATURED, TODAY } from "./data";
 import { addDays, getStatus } from "./status";
 import { Featured, FeaturedView, Filters } from "./types";
-import { usePagination } from "../components/usePagination";
+import { usePagination } from "../shared/usePagination";
 
 export function useFeatured() {
   const [items, setItems] = useState<Featured[]>(INITIAL_FEATURED);

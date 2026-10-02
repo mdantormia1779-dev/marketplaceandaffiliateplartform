@@ -6,7 +6,7 @@ import BrandsTable from "./BrandsTable";
 import BrandsToolbar from "./BrandsToolbar";
 import BrandStats from "./BrandStats";
 
-import Pagination from "../components/Pagination";
+import Pagination from "../shared/Pagination";
 import { useBrands } from "./useBrands";
 import { exportCsv } from "./exportCsv";
 

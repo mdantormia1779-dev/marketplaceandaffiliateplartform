@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { INITIAL_BRANDS } from "./data";
 import { Brand, BrandStatus, Filters } from "./types";
-import { usePagination } from "../components/usePagination";
+import { usePagination } from "../shared/usePagination";
 
 export function useBrands() {
   const [brands, setBrands] = useState<Brand[]>(INITIAL_BRANDS);

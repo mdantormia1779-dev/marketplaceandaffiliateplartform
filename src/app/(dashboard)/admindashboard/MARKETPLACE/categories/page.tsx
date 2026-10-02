@@ -5,7 +5,7 @@ import CategoriesTable from "./CategoriesTable";
 import CategoriesToolbar from "./CategoriesToolbar";
 import CategoryStats from "./CategoryStats";
 import CreateCategoryModal from "./CreateCategoryModal";
-import Pagination from "../components/Pagination";
+import Pagination from "../shared/Pagination";
 
 import { useCategories } from "./useCategories";
 import { exportCsv } from "./exportCsv";

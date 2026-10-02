@@ -7,7 +7,7 @@ import FeaturedTable from "./FeaturedTable";
 import FeaturedToolbar from "./FeaturedToolbar";
 import FeatureProductModal from "./FeatureProductModal";
 import { useFeatured } from "./useFeatured";
-import Pagination from "../components/Pagination";
+import Pagination from "../shared/Pagination";
 
 export default function FeaturedPage() {
   const f = useFeatured();

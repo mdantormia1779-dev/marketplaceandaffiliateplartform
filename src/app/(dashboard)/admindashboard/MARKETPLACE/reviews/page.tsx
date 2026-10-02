@@ -5,7 +5,7 @@ import ReviewsTable from "./ReviewsTable";
 import ReviewsToolbar from "./ReviewsToolbar";
 import ReviewStats from "./ReviewStats";
 import { useReviews } from "./useReviews";
-import Pagination from "../components/Pagination";
+import Pagination from "../shared/Pagination";
 
 export default function ReviewsPage() {
   const r = useReviews();
