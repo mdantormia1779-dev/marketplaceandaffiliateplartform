@@ -1,5 +1,5 @@
 export type ScreenType = 'login' | 'gateway' | 'supplier-onboarding' | 'affiliate-register' | 'customer-register';
-export type RoleType = 'customer' | 'affiliate' | 'supplier';
+export type RoleType = 'customer' | 'affiliate' | 'supplier' | 'admin';
 export type PayoutMethod = 'bkash' | 'nagad' | 'bank';
 
 export interface Product {

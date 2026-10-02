@@ -1,4 +1,7 @@
+'use client';
+
 import React, { useState, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 import { 
   Store, 
   User, 
@@ -10,7 +13,7 @@ import {
   ArrowRight 
 } from 'lucide-react';
 import { ScreenType } from '../types';
-import { saveAuthUser } from '../lib/auth'; // path apnar structure onujayi thik korben
+import { saveAuthUser, AUTH_EVENT } from '../lib/auth'; // path apnar structure onujayi thik korben
 
 // Imports from supplier-onboarding sub-folder
 import { OnboardingStepper } from './supplier-onboarding/OnboardingStepper';
@@ -26,15 +29,19 @@ interface ScreenSupplierOnboardingProps {
   triggerToast?: (msg: string) => void;
 }
 
-// Supplier dashboard ekhon real Next.js route hisebe toiri hoye gache:
-// app/(dashboard)/supplierdashboard/page.tsx
-// Route group "(dashboard)" URL-e dekha jay na, tai actual path thakbe /supplierdashboard
+// Route group "(dashboard)" URL-e dekha jay na, tai actual path eta
 const SUPPLIER_DASHBOARD_PATH = '/supplierdashboard';
+
+// Supplier Navbar/Settings ei key theke profile pore
+const SUPPLIER_PROFILE_KEY = 'supplier-profile';
+const SUPPLIER_PROFILE_EVENT = 'supplier-profile-updated';
 
 export const ScreenSupplierOnboarding: React.FC<ScreenSupplierOnboardingProps> = ({
   onNavigate,
   triggerToast,
 }) => {
+  const router = useRouter();
+
   // Step Navigation State (1 to 5)
   const [currentStep, setCurrentStep] = useState<number>(1);
 
@@ -187,25 +194,37 @@ export const ScreenSupplierOnboarding: React.FC<ScreenSupplierOnboardingProps> =
     setCurrentStep(2);
   };
 
-  // Step 5-e successful submission howar por eta call hoy.
-  // Ekhane supplier-er auth info save kora hocche (Navbar-e dekhanor jonno)
-  // ar tarpor asol /supplierdashboard route-e pathano hocche.
-  const handleGoToDashboard = () => {
-    saveAuthUser({
-      name: formData.ownerName || 'Supplier',
-      email: formData.email,
-      role: 'supplier',
-    });
+  // Step 4 submit korle: login user + supplier profile duto-i save kori
+  // (Navbar, TopBar ar Settings sathe sathe asol nam/email dekhabe), tarpor Step 5 e jai
+  const handleSubmitApplication = () => {
+    const name = formData.ownerName.trim() || 'Supplier';
+    const email = formData.email.trim();
 
-    triggerToast?.('Welcome! Redirecting to your Supplier Dashboard...');
+    // 1) Login-er user (role: supplier)
+    saveAuthUser({ name, email, role: 'supplier' });
+    window.dispatchEvent(new Event(AUTH_EVENT));
 
-    // Notun (dashboard) route group-e asol page thakay,
-    // sorasori hard navigation e sob theke nirbhorjogyo.
-    // Apnar project e next/navigation-er useRouter thakle
-    // eta router.push(SUPPLIER_DASHBOARD_PATH) diye o replace kora jay.
-    if (typeof window !== 'undefined') {
-      window.location.href = SUPPLIER_DASHBOARD_PATH;
+    // 2) Supplier Navbar/Settings er profile (phone ar store name shoho)
+    const profileData = {
+      name,
+      email,
+      phone: formData.phone.trim(),
+      storeName: formData.storeName.trim(),
+    };
+    try {
+      localStorage.setItem(SUPPLIER_PROFILE_KEY, JSON.stringify(profileData));
+    } catch {
+      // localStorage na pele ignore, login user toh save hoyei gache
     }
+    window.dispatchEvent(new CustomEvent(SUPPLIER_PROFILE_EVENT, { detail: profileData }));
+
+    setCurrentStep(5);
+  };
+
+  // Step 5 er button: sorasori supplier dashboard e niye jabe
+  const handleGoToDashboard = () => {
+    triggerToast?.('Welcome! Redirecting to your Supplier Dashboard...');
+    setTimeout(() => router.push(SUPPLIER_DASHBOARD_PATH), 500);
   };
 
   return (
@@ -454,18 +473,16 @@ export const ScreenSupplierOnboarding: React.FC<ScreenSupplierOnboardingProps> =
         {currentStep === 4 && (
           <SupplierReviewStep4
             onBack={() => setCurrentStep(3)}
-            onSubmit={() => {
-              setCurrentStep(5); // Submit করার পর Step 5 এ চলে যাবে
-            }}
+            onSubmit={handleSubmitApplication}
             triggerToast={triggerToast}
           />
         )}
 
-        {/* STEP 5: Success — Ekhon auth save kore asol dashboard-e pathay */}
+        {/* STEP 5: Success, button click korle supplier dashboard e jabe */}
         {currentStep === 5 && (
           <SupplierSuccessStep5
             ownerName={formData.ownerName}
-            onEditApplication={() => setCurrentStep(1)} // আবার প্রথম স্টেপে নিয়ে যাবে
+            onEditApplication={() => setCurrentStep(1)}
             onGoToSign={handleGoToDashboard}
           />
         )}

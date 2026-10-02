@@ -20,55 +20,32 @@ import {
   AUTH_EVENT,
 } from "../../../../lib/auth";
 
-const defaultUser: AuthUser = {
-  name: "Debraz",
-  email: "debraz@marketplace.com",
-  role: "affiliate",
+// Role onujayi label ar rong. Notun role dile shudhu ekhane add korlei hobe
+const ROLE_META: Record<string, { label: string; badge: string }> = {
+  affiliate: { label: "Affiliate", badge: "bg-emerald-50 text-emerald-600" },
+  supplier:  { label: "Supplier",  badge: "bg-purple-50 text-purple-600" },
+  admin:     { label: "Admin",     badge: "bg-rose-50 text-rose-600" },
+  customer:  { label: "Customer",  badge: "bg-blue-50 text-blue-600" },
 };
 
 type TopBarProps = {
   onMenuClick?: () => void;
+  title?: string; // page onujayi bodlano jay, default "Analytics"
 };
 
-export default function TopBar({ onMenuClick }: TopBarProps) {
-  const [profile, setProfile] = useState<AuthUser>(defaultUser);
-  const [mounted, setMounted] = useState(false);
+export default function TopBar({ onMenuClick, title = "Analytics" }: TopBarProps) {
+  const [profile, setProfile] = useState<AuthUser | null>(null); // null = login kora nai
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let cancelled = false;
+    // Login kora user ke pore ni, ar login/logout hole abar load kori
+    const load = () => setProfile(getAuthUser());
+    load();
 
-    const loadProfile = () => {
-      try {
-        const savedUser = getAuthUser();
-        if (!cancelled) {
-          if (savedUser) {
-            setProfile(savedUser);
-          }
-          setMounted(true);
-        }
-      } catch {
-        if (!cancelled) {
-          setMounted(true);
-        }
-      }
-    };
-
-    const timer = window.setTimeout(loadProfile, 0);
-
-    const handleAuthUpdate = () => {
-      const savedUser = getAuthUser();
-      if (savedUser) {
-        setProfile(savedUser);
-      } else {
-        setProfile(defaultUser);
-      }
-    };
-
-    window.addEventListener(AUTH_EVENT, handleAuthUpdate);
-    window.addEventListener("storage", handleAuthUpdate);
+    window.addEventListener(AUTH_EVENT, load);
+    window.addEventListener("storage", load);
 
     // Close dropdown on outside click
     const handleClickOutside = (event: MouseEvent) => {
@@ -79,17 +56,16 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
     document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      cancelled = true;
-      window.clearTimeout(timer);
-      window.removeEventListener(AUTH_EVENT, handleAuthUpdate);
-      window.removeEventListener("storage", handleAuthUpdate);
+      window.removeEventListener(AUTH_EVENT, load);
+      window.removeEventListener("storage", load);
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  const initials = mounted ? getInitials(profile.name) : "D";
-  const displayName = mounted ? profile.name : defaultUser.name;
-  const displayEmail = mounted ? profile.email : defaultUser.email;
+  const displayName = profile?.name || "Guest";
+  const displayEmail = profile?.email || "";
+  const initials = profile ? getInitials(profile.name) : "G";
+  const role = ROLE_META[profile?.role ?? ""] ?? { label: "Guest", badge: "bg-slate-100 text-slate-500" };
 
   const handleLogout = () => {
     clearAuthUser();
@@ -111,9 +87,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
         </button>
 
         <div>
-          <h1 className="text-lg font-semibold text-gray-900 sm:text-xl">
-            Analytics
-          </h1>
+          <h1 className="text-lg font-semibold text-gray-900 sm:text-xl">{title}</h1>
           <p className="hidden text-sm text-gray-500 sm:block">
             Hi, {displayName} 👋 Ready to grow your affiliate earnings?
           </p>
@@ -133,7 +107,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
         </div>
 
         {/* Mobile Search Button */}
-        <button 
+        <button
           onClick={() => setMobileSearchOpen(!mobileSearchOpen)}
           className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 sm:hidden"
         >
@@ -159,9 +133,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
             <Wallet className="h-4 w-4" />
           </div>
           <div className="leading-tight">
-            <p className="text-[10px] font-medium tracking-wide text-gray-400">
-              WALLET
-            </p>
+            <p className="text-[10px] font-medium tracking-wide text-gray-400">WALLET</p>
             <p className="text-sm font-semibold text-gray-900">৳42,680</p>
           </div>
         </div>
@@ -177,8 +149,8 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
               {initials}
             </div>
             <div className="hidden text-left leading-tight sm:block">
-              <p className="text-sm font-semibold text-gray-900">{displayName}</p>
-              <p className="text-xs text-emerald-600 font-medium">Gold Partner</p>
+              <p className="max-w-[120px] truncate text-sm font-semibold text-gray-900">{displayName}</p>
+              <p className="text-xs text-emerald-600 font-medium">{role.label}</p>
             </div>
             <ChevronDown
               className={`hidden h-4 w-4 text-gray-400 transition-transform sm:block ${
@@ -196,14 +168,12 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                     {initials}
                   </div>
                   <div className="min-w-0">
-                    <p className="truncate text-sm font-semibold text-slate-800">
-                      {displayName}
-                    </p>
-                    <p className="truncate text-xs text-slate-400 mb-1">
-                      {displayEmail}
-                    </p>
-                    <span className="inline-block rounded-md bg-emerald-50 px-2 py-0.5 text-[10px] font-bold text-emerald-600 uppercase tracking-wide">
-                      Gold Partner
+                    <p className="truncate text-sm font-semibold text-slate-800">{displayName}</p>
+                    <p className="truncate text-xs text-slate-400 mb-1">{displayEmail}</p>
+                    <span
+                      className={`inline-block rounded-md px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${role.badge}`}
+                    >
+                      {role.label}
                     </span>
                   </div>
                 </div>
@@ -216,7 +186,7 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
                   onClick={() => setMenuOpen(false)}
                 >
                   <User size={16} className="text-slate-400" />
-                  Affiliate Profile
+                  {role.label} Profile
                 </button>
 
                 <button

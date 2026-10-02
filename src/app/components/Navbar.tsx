@@ -43,8 +43,16 @@ export default function Navbar({
   }, []);
 
   const isLoggedIn = !!authUser;
-  const dashboardPath = authUser ? getDashboardPath(authUser.role) : '#';
+
+  // Admin hole sorasori admin dashboard, baki role ager moto getDashboardPath diye
+  const dashboardPath = authUser
+    ? authUser.role === 'admin'
+      ? '/admindashboard'
+      : getDashboardPath(authUser.role)
+    : '#';
+
   const dashboardLabel =
+    authUser?.role === 'admin' ? 'Admin Dashboard' :
     authUser?.role === 'supplier' ? 'Supplier Dashboard' :
     authUser?.role === 'affiliate' ? 'Affiliate Dashboard' :
     'My Dashboard';
@@ -145,14 +153,18 @@ export default function Navbar({
                     </span>
                     <span
                       className={`text-[10px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md w-fit ${
-                        authUser?.role === 'supplier'
+                        authUser?.role === 'admin'
+                          ? 'bg-rose-50 text-rose-600'
+                          : authUser?.role === 'supplier'
                           ? 'bg-purple-50 text-purple-600'
                           : authUser?.role === 'affiliate'
                           ? 'bg-emerald-50 text-emerald-600'
                           : 'bg-blue-50 text-blue-600'
                       }`}
                     >
-                      {authUser?.role === 'supplier'
+                      {authUser?.role === 'admin'
+                        ? 'Admin'
+                        : authUser?.role === 'supplier'
                         ? 'Supplier'
                         : authUser?.role === 'affiliate'
                         ? 'Affiliate'
@@ -170,14 +182,18 @@ export default function Navbar({
                         <p className="text-xs font-bold text-slate-800">{authUser?.name}</p>
                         <span
                           className={`text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md ${
-                            authUser?.role === 'supplier'
+                            authUser?.role === 'admin'
+                              ? 'bg-rose-50 text-rose-600'
+                              : authUser?.role === 'supplier'
                               ? 'bg-purple-50 text-purple-600'
                               : authUser?.role === 'affiliate'
                               ? 'bg-emerald-50 text-emerald-600'
                               : 'bg-blue-50 text-blue-600'
                           }`}
                         >
-                          {authUser?.role === 'supplier'
+                          {authUser?.role === 'admin'
+                            ? 'Admin'
+                            : authUser?.role === 'supplier'
                             ? 'Supplier'
                             : authUser?.role === 'affiliate'
                             ? 'Affiliate'
@@ -265,14 +281,18 @@ export default function Navbar({
                     <p className="text-sm font-bold text-slate-800">{authUser?.name}</p>
                     <span
                       className={`text-[9px] font-bold uppercase tracking-wide px-1.5 py-0.5 rounded-md ${
-                        authUser?.role === 'supplier'
+                        authUser?.role === 'admin'
+                          ? 'bg-rose-50 text-rose-600'
+                          : authUser?.role === 'supplier'
                           ? 'bg-purple-50 text-purple-600'
                           : authUser?.role === 'affiliate'
                           ? 'bg-emerald-50 text-emerald-600'
                           : 'bg-blue-50 text-blue-600'
                       }`}
                     >
-                      {authUser?.role === 'supplier'
+                      {authUser?.role === 'admin'
+                        ? 'Admin'
+                        : authUser?.role === 'supplier'
                         ? 'Supplier'
                         : authUser?.role === 'affiliate'
                         ? 'Affiliate'

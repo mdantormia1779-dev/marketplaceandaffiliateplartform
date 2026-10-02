@@ -11,10 +11,11 @@ export default function ConditionalLayout({
 }) {
   const pathname = usePathname();
 
-  // supplierdashboard ba affiliatedashboard hole navbar/footer hide hobe
+  // supplierdashboard, affiliatedashboard ba admindashboard hole navbar/footer hide hobe
   const isDashboard = 
     pathname?.startsWith("/supplierdashboard") || 
-    pathname?.startsWith("/affiliatedashboard");
+    pathname?.startsWith("/affiliatedashboard") || 
+    pathname?.startsWith("/admindashboard");
 
   return (
     <>

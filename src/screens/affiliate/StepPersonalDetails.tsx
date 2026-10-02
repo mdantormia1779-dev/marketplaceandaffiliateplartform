@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { User, Phone, Mail, Lock, Eye, EyeOff, Link as LinkIcon, ArrowRight, ArrowLeft, Globe, CheckCircle2 } from 'lucide-react';
 
+// Parent ke nam ar email pathano hobe (password kokhono pathano hobe na)
+export interface PersonalDetailsData {
+  name: string;
+  email: string;
+}
+
 interface Props {
-  onNext: () => void;
+  onNext: (data: PersonalDetailsData) => void;
   onNavigate: (screen: any) => void;
 }
 
@@ -26,7 +32,8 @@ export const StepPersonalDetails: React.FC<Props> = ({ onNext, onNavigate }) => 
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onNext();
+    // Nam ar email parent ke pathai, jate Navbar/TopBar e dekhate pare
+    onNext({ name: fullName.trim(), email: email.trim() });
   };
 
   return (

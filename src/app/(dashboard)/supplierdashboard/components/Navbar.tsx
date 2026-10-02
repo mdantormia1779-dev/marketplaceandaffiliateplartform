@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   Bell,
@@ -11,7 +11,9 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
+import { getAuthUser, clearAuthUser, getInitials, AUTH_EVENT } from "@/lib/auth";
 
+// Onno file (ProfileSettings) eta import kore, tai export rakhlam
 export type ProfileData = {
   name: string;
   email: string;
@@ -19,110 +21,91 @@ export type ProfileData = {
   storeName: string;
 };
 
-const defaultProfile: ProfileData = {
-  name: "Ayesha Rahman",
-  email: "supplier@example.com",
-  phone: "+880 1XXX-XXXXXX",
-  storeName: "Store Owner",
-};
+const PROFILE_KEY = "supplier-profile";
+const PROFILE_EVENT = "supplier-profile-updated";
 
-function getInitials(name: string) {
-  return (
-    name
-      .trim()
-      .split(/\s+/)
-      .slice(0, 2)
-      .map((word) => word.charAt(0).toUpperCase())
-      .join("") || "SA"
-  );
+// Login-er user ke base kore, Settings-e edit kora data (thakle) oporer e boshe
+function loadProfile(): ProfileData | null {
+  const auth = getAuthUser();
+  if (!auth) return null; // login kora nai
+
+  let saved: Partial<ProfileData> = {};
+  try {
+    const raw = localStorage.getItem(PROFILE_KEY);
+    if (raw) saved = JSON.parse(raw);
+  } catch {
+    // vul data hole ignore
+  }
+
+  return {
+    name: saved.name || auth.name,
+    email: saved.email || auth.email,
+    phone: saved.phone || "",
+    storeName: saved.storeName || "",
+  };
 }
 
 export default function Navbar() {
   const router = useRouter();
 
-  const [profile, setProfile] = useState<ProfileData>(defaultProfile);
-
-  const [mounted, setMounted] = useState(false);
+  const [profile, setProfile] = useState<ProfileData | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    let cancelled = false;
+    const load = () => setProfile(loadProfile());
+    load();
 
-    const loadProfile = () => {
-      try {
-        const saved = localStorage.getItem("supplier-profile");
-
-        if (!saved) {
-          if (!cancelled) {
-            setMounted(true);
-          }
-          return;
-        }
-
-        const savedData = JSON.parse(saved);
-
-        if (!cancelled) {
-          setProfile({
-            ...defaultProfile,
-            ...savedData,
-          });
-
-          setMounted(true);
-        }
-      } catch {
-        if (!cancelled) {
-          setMounted(true);
-        }
-      }
-    };
-
-    const timer = window.setTimeout(loadProfile, 0);
-
+    // Settings theke profile update hole
     const handleProfileUpdate = (event: Event) => {
-      const customEvent = event as CustomEvent<ProfileData>;
-
-      if (!customEvent.detail) {
-        return;
+      const detail = (event as CustomEvent<Partial<ProfileData>>).detail;
+      if (detail) {
+        setProfile((prev) => (prev ? { ...prev, ...detail } : prev));
+      } else {
+        load();
       }
-
-      setProfile({
-        ...defaultProfile,
-        ...customEvent.detail,
-      });
     };
 
-    window.addEventListener(
-      "supplier-profile-updated",
-      handleProfileUpdate
-    );
+    // Bairer e click korle dropdown bondho
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+
+    window.addEventListener(AUTH_EVENT, load);
+    window.addEventListener("storage", load);
+    window.addEventListener(PROFILE_EVENT, handleProfileUpdate);
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      cancelled = true;
-      window.clearTimeout(timer);
-
-      window.removeEventListener(
-        "supplier-profile-updated",
-        handleProfileUpdate
-      );
+      window.removeEventListener(AUTH_EVENT, load);
+      window.removeEventListener("storage", load);
+      window.removeEventListener(PROFILE_EVENT, handleProfileUpdate);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  const initials = mounted
-    ? getInitials(profile.name)
-    : "SA";
-
-  const displayName = mounted
-    ? profile.name
-    : defaultProfile.name;
-
-  const displayEmail = mounted
-    ? profile.email
-    : defaultProfile.email;
+  const displayName = profile?.name || "Guest";
+  const displayEmail = profile?.email || "";
+  const initials = profile ? getInitials(profile.name) : "G";
 
   const goToSettings = () => {
     setMenuOpen(false);
     router.push("/supplierdashboard/account/settings");
+  };
+
+  // Logout: login data ar saved profile duto-i muche login page e niye jay
+  const handleLogout = () => {
+    setMenuOpen(false);
+    clearAuthUser();
+    try {
+      localStorage.removeItem(PROFILE_KEY);
+    } catch {
+      // ignore
+    }
+    window.location.href = "/login";
   };
 
   return (
@@ -179,9 +162,7 @@ export default function Navbar() {
           {/* Mobile Search */}
           <button
             type="button"
-            onClick={() =>
-              setMobileSearchOpen((value) => !value)
-            }
+            onClick={() => setMobileSearchOpen((value) => !value)}
             className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 md:hidden"
             aria-label="Search"
           >
@@ -205,13 +186,11 @@ export default function Navbar() {
           {/* =========================
               PROFILE MENU
           ========================== */}
-          <div className="relative">
+          <div className="relative" ref={dropdownRef}>
 
             <button
               type="button"
-              onClick={() =>
-                setMenuOpen((value) => !value)
-              }
+              onClick={() => setMenuOpen((value) => !value)}
               className="flex items-center gap-2 rounded-xl px-1.5 py-1.5 transition hover:bg-slate-50"
               aria-expanded={menuOpen}
               aria-label="Open profile menu"
@@ -224,11 +203,11 @@ export default function Navbar() {
 
               {/* User information */}
               <div className="hidden text-left sm:block">
-                <p className="max-w-30 truncate text-xs font-semibold text-slate-800">
+                <p className="max-w-[140px] truncate text-xs font-semibold text-slate-800">
                   {displayName}
                 </p>
 
-                <p className="max-w-30 truncate text-[10px] text-slate-400">
+                <p className="max-w-[140px] truncate text-[10px] text-slate-400">
                   {displayEmail}
                 </p>
               </div>
@@ -272,15 +251,9 @@ export default function Navbar() {
                   <button
                     type="button"
                     className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50"
-                    onClick={() => {
-                      setMenuOpen(false);
-                    }}
+                    onClick={goToSettings}
                   >
-                    <User
-                      size={16}
-                      className="text-slate-400"
-                    />
-
+                    <User size={16} className="text-slate-400" />
                     Profile
                   </button>
 
@@ -289,11 +262,7 @@ export default function Navbar() {
                     className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-slate-700 transition hover:bg-slate-50"
                     onClick={goToSettings}
                   >
-                    <Settings
-                      size={16}
-                      className="text-slate-400"
-                    />
-
+                    <Settings size={16} className="text-slate-400" />
                     Settings
                   </button>
 
@@ -301,13 +270,10 @@ export default function Navbar() {
 
                   <button
                     type="button"
-                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm text-rose-600 transition hover:bg-rose-50"
-                    onClick={() => {
-                      setMenuOpen(false);
-                    }}
+                    className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
+                    onClick={handleLogout}
                   >
                     <LogOut size={16} />
-
                     Logout
                   </button>
 
