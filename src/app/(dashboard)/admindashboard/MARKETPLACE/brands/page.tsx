@@ -5,9 +5,10 @@ import BrandsHeader from "./BrandsHeader";
 import BrandsTable from "./BrandsTable";
 import BrandsToolbar from "./BrandsToolbar";
 import BrandStats from "./BrandStats";
-import { exportCsv } from "./exportCsv";
-import { useBrands } from "./useBrands";
+
 import Pagination from "../components/Pagination";
+import { useBrands } from "./useBrands";
+import { exportCsv } from "./exportCsv";
 
 export default function BrandsPage() {
   const b = useBrands();
