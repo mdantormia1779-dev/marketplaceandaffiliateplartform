@@ -108,11 +108,11 @@ const groups: Group[] = [
   {
     title: "Finance",
     items: [
-      { label: "Revenue", href: `${base}/revenue`, icon: DollarSign },
-      { label: "Transactions", href: `${base}/transactions`, icon: ArrowLeftRight },
-      { label: "Wallets", href: `${base}/wallets`, icon: Wallet },
-      { label: "Withdrawals", href: `${base}/withdrawals`, icon: Banknote },
-      { label: "Refunds", href: `${base}/finance-refunds`, icon: RotateCcw },
+      { label: "Revenue", href: `${base}/finance/revenue`, icon: DollarSign },
+      { label: "Transactions", href: `${base}/finance/transactions`, icon: ArrowLeftRight },
+      { label: "Wallets", href: `${base}/finance/wallets`, icon: Wallet },
+      { label: "Withdrawals", href: `${base}/finance/withdrawals`, icon: Banknote },
+      { label: "Refunds", href: `${base}/finance/refunds`, icon: RotateCcw },
     ],
   },
   {
