@@ -1,6 +1,10 @@
+'use client';
+
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Link as LinkIcon, Check } from 'lucide-react';
 import { ScreenType } from '../types';
+import { saveAuthUser, AUTH_EVENT } from '../lib/auth';
 import { StepPersonalDetails } from './affiliate/StepPersonalDetails';
 import { StepPaymentWallet } from './affiliate/StepPaymentWallet';
 import { StepAffiliateSuccess } from './affiliate/StepAffiliateSuccess';
@@ -10,20 +14,46 @@ interface ScreenAffiliateRegisterProps {
   triggerToast?: (msg: string) => void;
 }
 
+// (dashboard) route group URL e dekha jay na, tai asol path eta
+const AFFILIATE_DASHBOARD_PATH = '/affiliatedashboard';
+
+// Step 1 theke nam/email ashle Navbar e dekhabe
+interface AffiliateBasicInfo {
+  name?: string;
+  email?: string;
+}
+
 export const ScreenAffiliateRegister: React.FC<ScreenAffiliateRegisterProps> = ({
   onNavigate,
   triggerToast,
 }) => {
+  const router = useRouter();
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const [info, setInfo] = useState<AffiliateBasicInfo>({});
 
-  const handleNextStep = () => {
+  const handleNextStep = (data?: AffiliateBasicInfo) => {
+    if (data) setInfo(data);
     setCurrentStep(2);
     triggerToast?.('Personal details saved. Proceeding to payout setup!');
   };
 
   const handleFinalSubmit = () => {
+    // User save + Navbar ke janano
+    saveAuthUser({
+      name: info.name?.trim() || 'Affiliate',
+      email: info.email?.trim() || '',
+      role: 'affiliate',
+    });
+    window.dispatchEvent(new Event(AUTH_EVENT));
+
     setCurrentStep(3);
     triggerToast?.('Affiliate account created successfully!');
+  };
+
+  // Success step er je kono button e click korle dashboard e jabe
+  const handleSuccessNavigate = (_screen: ScreenType) => {
+    triggerToast?.('Welcome! Redirecting to your Affiliate Dashboard...');
+    setTimeout(() => router.push(AFFILIATE_DASHBOARD_PATH), 500);
   };
 
   return (
@@ -89,7 +119,7 @@ export const ScreenAffiliateRegister: React.FC<ScreenAffiliateRegisterProps> = (
           <StepPaymentWallet onBack={() => setCurrentStep(1)} onSubmit={handleFinalSubmit} />
         )}
         {currentStep === 3 && (
-          <StepAffiliateSuccess onNavigate={onNavigate} triggerToast={triggerToast} />
+          <StepAffiliateSuccess onNavigate={handleSuccessNavigate} triggerToast={triggerToast} />
         )}
 
         {/* Bottom Login Link - Only shown during Step 1 and Step 2 */}

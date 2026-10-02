@@ -1,16 +1,25 @@
+'use client';
+
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { User, Mail, Lock, Eye, EyeOff, ShoppingBag, Truck, Tag, ShieldCheck, ArrowRight } from 'lucide-react';
 import { ScreenType } from '../types';
+import { saveAuthUser, AUTH_EVENT } from '../lib/auth';
 
 interface ScreenCustomerRegisterProps {
   onNavigate: (screen: ScreenType) => void;
   triggerToast: (msg: string) => void;
 }
 
+// Customer er alada dashboard nei, tai home e jabe. Pore dashboard banale ekhane path ta bodle dio
+const CUSTOMER_REDIRECT_PATH = '/';
+
 export const ScreenCustomerRegister: React.FC<ScreenCustomerRegisterProps> = ({
   onNavigate,
   triggerToast,
 }) => {
+  const router = useRouter();
+
   const [fullName, setFullName] = useState<string>('');
   const [emailOrPhone, setEmailOrPhone] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -23,7 +32,17 @@ export const ScreenCustomerRegister: React.FC<ScreenCustomerRegisterProps> = ({
       triggerToast('Please agree to the Terms of Service to continue.');
       return;
     }
+
+    // User save + Navbar ke janano (jate nam/role sathe sathe dekhay)
+    saveAuthUser({
+      name: fullName.trim() || 'Customer',
+      email: emailOrPhone.trim(),
+      role: 'customer',
+    });
+    window.dispatchEvent(new Event(AUTH_EVENT));
+
     triggerToast('Customer account created successfully!');
+    setTimeout(() => router.push(CUSTOMER_REDIRECT_PATH), 700);
   };
 
   return (
@@ -173,6 +192,7 @@ export const ScreenCustomerRegister: React.FC<ScreenCustomerRegisterProps> = ({
               <p className="text-xs text-slate-500 font-medium">
                 Already registered?{' '}
                 <button
+                  type="button"
                   onClick={() => onNavigate('login')}
                   className="font-bold text-blue-600 hover:text-blue-700 transition-colors"
                 >
