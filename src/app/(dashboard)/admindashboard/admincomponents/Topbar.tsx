@@ -2,12 +2,13 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { Search, Zap, CircleHelp, Bell, ChevronDown, User, Settings, LogOut } from "lucide-react";
-import { getAuthUser, clearAuthUser } from "@/lib/auth"; // path/naam tomar lib/auth onujayi milay nio
+import { Search, Zap, CircleHelp, Bell, ChevronDown, User, Settings, LogOut, Menu } from "lucide-react";
+import { getAuthUser, clearAuthUser } from "@/lib/auth"; 
 
 interface TopbarProps {
   title?: string;
   subtitle?: string;
+  onMenuClick?: () => void;
 }
 
 // Login e save kora user er shape
@@ -25,7 +26,7 @@ const ROLE_LABELS: Record<string, string> = {
   customer: "Customer",
 };
 
-// "Ava Reyes" -> "AR", "Admin" -> "AD"
+
 const getInitials = (name: string) => {
   const words = name.trim().split(/\s+/);
   const letters = words.length > 1 ? words[0][0] + words[1][0] : name.slice(0, 2);
@@ -35,6 +36,7 @@ const getInitials = (name: string) => {
 export default function Topbar({
   title = "Dashboard",
   subtitle = "Marketplace control center",
+  onMenuClick,
 }: TopbarProps) {
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -71,9 +73,21 @@ export default function Topbar({
 
   return (
     <header className="flex h-[68px] shrink-0 items-center justify-between gap-4 border-b border-slate-200 bg-white px-6 relative">
-      <div className="leading-tight">
-        <h2 className="text-[17px] font-semibold text-slate-900">{title}</h2>
-        <p className="text-xs text-slate-500">{subtitle}</p>
+      <div className="flex items-center gap-3">
+        {/* Hamburger: sudhu mobile/tablet e dekhabe (lg theke desktop e hidden) */}
+        <button
+          type="button"
+          onClick={onMenuClick}
+          aria-label="Open menu"
+          className="rounded-lg p-2 text-slate-700 hover:bg-slate-100 lg:hidden"
+        >
+          <Menu className="h-6 w-6" />
+        </button>
+
+        <div className="leading-tight">
+          <h2 className="text-[17px] font-semibold text-slate-900">{title}</h2>
+          <p className="text-xs text-slate-500">{subtitle}</p>
+        </div>
       </div>
 
       <div className="flex items-center gap-3">
