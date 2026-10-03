@@ -2,7 +2,7 @@
 import { useMemo, useState } from "react";
 import { BASE_OFFSET, INITIAL_REVIEWS } from "./data";
 import { Filters, Review, ReviewStatus } from "./types";
-import { usePagination } from "../components/usePagination";
+import { usePagination } from "../shared/usePagination";
 
 export function useReviews() {
   const [reviews, setReviews] = useState<Review[]>(INITIAL_REVIEWS);

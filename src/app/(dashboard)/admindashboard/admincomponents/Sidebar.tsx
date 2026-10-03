@@ -74,11 +74,11 @@ const groups: Group[] = [
   {
     title: "Marketplace",
     items: [
-      { label: "Products", href: `${base}/products`, icon: Package },
-      { label: "Categories", href: `${base}/marketplace/categories`, icon: Grid2x2 },
-      { label: "Brands", href: `${base}/marketplace/brands`, icon: Tag },
-      { label: "Reviews", href: `${base}/marketplace/reviews`, icon: Star },
-      { label: "Featured Products", href: `${base}/marketplace/featured`, icon: Sparkles },
+      { label: "Products", href: `${base}/MARKETPLACE/products`, icon: Package },
+      { label: "Categories", href: `${base}/MARKETPLACE/categories`, icon: Grid2x2 },
+      { label: "Brands", href: `${base}/MARKETPLACE/brands`, icon: Tag },
+      { label: "Reviews", href: `${base}/MARKETPLACE/reviews`, icon: Star },
+      { label: "Featured Products", href: `${base}/MARKETPLACE/featured`, icon: Sparkles },
     ],
   },
   {
@@ -108,11 +108,11 @@ const groups: Group[] = [
   {
     title: "Finance",
     items: [
-      { label: "Revenue", href: `${base}/revenue`, icon: DollarSign },
-      { label: "Transactions", href: `${base}/transactions`, icon: ArrowLeftRight },
-      { label: "Wallets", href: `${base}/wallets`, icon: Wallet },
-      { label: "Withdrawals", href: `${base}/withdrawals`, icon: Banknote },
-      { label: "Refunds", href: `${base}/finance-refunds`, icon: RotateCcw },
+      { label: "Revenue", href: `${base}/finance/revenue`, icon: DollarSign },
+      { label: "Transactions", href: `${base}/finance/transactions`, icon: ArrowLeftRight },
+      { label: "Wallets", href: `${base}/finance/wallets`, icon: Wallet },
+      { label: "Withdrawals", href: `${base}/finance/withdrawals`, icon: Banknote },
+      { label: "Refunds", href: `${base}/finance/refunds`, icon: RotateCcw },
     ],
   },
   {
@@ -128,7 +128,7 @@ const groups: Group[] = [
   {
     title: "Reports",
     items: [
-      { label: "Sales", href: `${base}/sales-reports`, icon: BarChart3 },
+      { label: "Sales", href: `${base}/reports/sales`, icon: BarChart3 },
       { label: "Revenue", href: `${base}/revenue-reports`, icon: LineChart },
       { label: "Affiliate", href: `${base}/affiliate-reports`, icon: Users },
       { label: "Supplier", href: `${base}/supplier-reports`, icon: Truck },

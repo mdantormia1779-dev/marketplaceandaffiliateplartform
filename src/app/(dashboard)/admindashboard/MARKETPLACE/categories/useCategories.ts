@@ -3,7 +3,7 @@ import { useMemo, useState } from "react";
 import { INITIAL_CATEGORIES } from "./data";
 import { slugify } from "./slugify";
 import { Category, Filters } from "./types";
-import { usePagination } from "../components/usePagination";
+import { usePagination } from "../shared/usePagination";
 
 export function useCategories() {
   const [categories, setCategories] = useState<Category[]>(INITIAL_CATEGORIES);

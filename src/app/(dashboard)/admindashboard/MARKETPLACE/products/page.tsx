@@ -1,5 +1,4 @@
-import ProductsPage from "../MARKETPLACE/components/page";
-
+import ProductsPage from "../components/ProductsPage";
 
 export default function Page() {
   return <ProductsPage />;
