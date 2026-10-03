@@ -28,3 +28,11 @@ html,
 body {
   min-height: 100%;
 }
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop {
+    border-color: var(--color-gray-200, currentColor);
+  }
+}
