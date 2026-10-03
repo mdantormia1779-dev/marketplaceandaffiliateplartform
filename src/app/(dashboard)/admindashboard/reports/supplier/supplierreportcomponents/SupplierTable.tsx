@@ -22,7 +22,7 @@ interface Props {
 export default function SupplierTable({ rows, sort, onSort }: Props) {
   return (
     <div className="overflow-x-auto">
-      <table className="w-full min-w-[900px] text-left">
+      <table className="w-full min-w-225 text-left">
         <thead>
           <tr className="border-t border-gray-100 text-xs font-medium uppercase tracking-wide text-gray-500">
             {COLS.map((c) => {
