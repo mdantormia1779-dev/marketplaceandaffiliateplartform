@@ -129,10 +129,10 @@ const groups: Group[] = [
     title: "Reports",
     items: [
       { label: "Sales", href: `${base}/reports/sales`, icon: BarChart3 },
-      { label: "Revenue", href: `${base}/revenue-reports`, icon: LineChart },
-      { label: "Affiliate", href: `${base}/affiliate-reports`, icon: Users },
-      { label: "Supplier", href: `${base}/supplier-reports`, icon: Truck },
-      { label: "Customer", href: `${base}/customer-reports`, icon: UserCheck },
+      { label: "Revenue", href: `${base}/reports/revenue`, icon: LineChart },
+      { label: "Affiliate", href: `${base}/reports/affiliate`, icon: Users },
+      { label: "Supplier", href: `${base}/reports/supplier`, icon: Truck },
+      { label: "Customer", href: `${base}/reports/customer`, icon: UserCheck },
     ],
   },
   {

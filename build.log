@@ -1,0 +1,84 @@
+▲ Next.js 16.3.5 (Turbopack)
+✓ Running next.config.ts took 28ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 2.4s
+  Running TypeScript ...
+  Finished TypeScript in 10.3s ...
+  Collecting page data using 15 workers ...
+  Generating static pages using 15 workers (0/64) ...
+  Generating static pages using 15 workers (16/64) 
+  Generating static pages using 15 workers (32/64) 
+  Generating static pages using 15 workers (48/64) 
+✓ Generating static pages using 15 workers (64/64) in 1263ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ○ /admindashboard
+├ ○ /admindashboard/finance
+├ ○ /admindashboard/finance/refunds
+├ ○ /admindashboard/finance/revenue
+├ ○ /admindashboard/finance/transactions
+├ ○ /admindashboard/finance/wallets
+├ ○ /admindashboard/finance/withdrawals
+├ ○ /admindashboard/MARKETPLACE/brands
+├ ○ /admindashboard/MARKETPLACE/categories
+├ ○ /admindashboard/MARKETPLACE/featured
+├ ○ /admindashboard/MARKETPLACE/products
+├ ○ /admindashboard/MARKETPLACE/reviews
+├ ○ /admindashboard/reports/affiliate
+├ ○ /admindashboard/reports/revenue
+├ ○ /admindashboard/reports/sales
+├ ○ /admindashboard/reports/supplier
+├ ○ /admindashboard/supplier
+├ ○ /admindashboard/supplier/approvals
+├ ○ /admindashboard/supplier/joining-fees
+├ ○ /admindashboard/supplier/subscriptions
+├ ○ /admindashboard/supplier/supplier-referrals
+├ ○ /admindashboard/supplier/suppliers
+├ ○ /admindashboard/users/affiliates
+├ ○ /admindashboard/users/customers
+├ ○ /admindashboard/users/staff
+├ ○ /affiliatedashboard
+├ ○ /affiliatedashboard/affiliateprofile
+├ ○ /affiliatedashboard/all-links
+├ ○ /affiliatedashboard/analytics
+├ ○ /affiliatedashboard/bonuses
+├ ○ /affiliatedashboard/browseproducts
+├ ○ /affiliatedashboard/commissions
+├ ○ /affiliatedashboard/help
+├ ○ /affiliatedashboard/notifications
+├ ○ /affiliatedashboard/referrals
+├ ○ /affiliatedashboard/sales
+├ ○ /affiliatedashboard/settings
+├ ○ /affiliatedashboard/traffic
+├ ○ /affiliatedashboard/withdrawals
+├ ○ /login
+├ ○ /products
+├ ƒ /products/[id]
+├ ○ /supplierdashboard
+├ ○ /supplierdashboard/account/reports
+├ ○ /supplierdashboard/account/settings
+├ ○ /supplierdashboard/account/subscription/billing
+├ ○ /supplierdashboard/account/subscription/current-plan
+├ ○ /supplierdashboard/account/subscription/upgrade
+├ ○ /supplierdashboard/affiliates
+├ ○ /supplierdashboard/coupons
+├ ○ /supplierdashboard/discounts
+├ ○ /supplierdashboard/finance/sales
+├ ○ /supplierdashboard/finance/wallet
+├ ○ /supplierdashboard/finance/withdraw
+├ ○ /supplierdashboard/orders
+├ ○ /supplierdashboard/orders/pending
+├ ○ /supplierdashboard/orders/shipped
+├ ○ /supplierdashboard/products
+├ ○ /supplierdashboard/products/add
+├ ○ /supplierdashboard/products/inventory
+└ ○ /supplierdashboard/reviews
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
