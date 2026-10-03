@@ -84,13 +84,13 @@ const groups: Group[] = [
   {
     title: "Orders",
     items: [
-      { label: "All Orders", href: `${base}/all-orders`, icon: ShoppingBag },
-      { label: "Pending", href: `${base}/pending-orders`, icon: Clock },
-      { label: "Processing", href: `${base}/processing-orders`, icon: RefreshCw },
-      { label: "Shipped", href: `${base}/shipped-orders`, icon: Truck },
-      { label: "Delivered", href: `${base}/delivered-orders`, icon: CheckCircle },
-      { label: "Cancelled", href: `${base}/cancelled-orders`, icon: XCircle },
-      { label: "Refunds", href: `${base}/refunds`, icon: RotateCcw },
+      { label: "All Orders", href: `${base}/order/all-orders`, icon: ShoppingBag },
+      { label: "Pending", href: `${base}/order/pending-orders`, icon: Clock },
+      { label: "Processing", href: `${base}/order/processing-orders`, icon: RefreshCw },
+      { label: "Shipped", href: `${base}/order/shipped-orders`, icon: Truck },
+      { label: "Delivered", href: `${base}/order/delivered-orders`, icon: CheckCircle },
+      { label: "Cancelled", href: `${base}/order/cancelled-orders`, icon: XCircle },
+      { label: "Refunds", href: `${base}/order/refunds`, icon: RotateCcw },
     ],
   },
   {
