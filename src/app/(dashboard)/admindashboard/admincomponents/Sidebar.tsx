@@ -138,12 +138,12 @@ const groups: Group[] = [
   {
     title: "Settings",
     items: [
-      { label: "Commission", href: `${base}/settings/commission`, icon: Percent },
-      { label: "Subscription", href: `${base}/settings/subscription`, icon: CreditCard },
-      { label: "Joining Fee", href: `${base}/settings/joining-fee`, icon: DollarSign },
-      { label: "Referral", href: `${base}/settings/referral`, icon: UserPlus },
+      { label: "Commission", href: `${base}/settings/Commission`, icon: Percent },
+      { label: "Subscription", href: `${base}/settings/Subscription`, icon: CreditCard },
+      { label: "Joining Fee", href: `${base}/settings/joiningfee`, icon: DollarSign },
+      { label: "Referral", href: `${base}/settings/Referral`, icon: UserPlus },
       { label: "Bonus", href: `${base}/settings/bonus`, icon: Award },
-      { label: "Payment", href: `${base}/settings/payment`, icon: CreditCard },
+      { label: "Payment", href: `${base}/settings/Payment`, icon: CreditCard },
       { label: "General Settings", href: `${base}/settings/general`, icon: Settings },
     ],
   },
