@@ -10,10 +10,38 @@ const badge = {
 };
 
 const actions = [
-  { count: 14, title: "Product approvals", desc: "New listings awaiting moderation", cta: "Review products", href: "/admindashboard/products", tone: "green" },
-  { count: 6, title: "Supplier applications", desc: "Stores requesting to join", cta: "Review suppliers", href: "/admindashboard/approvals", tone: "orange" },
-  { count: 9, title: "Withdrawal requests", desc: "Affiliate payouts to process", cta: "Process payouts", href: "/admindashboard/affiliates", tone: "teal" },
-  { count: 8, title: "Flagged reviews", desc: "Reported by customers", cta: "Moderate reviews", href: "/admindashboard/reviews", tone: "gray" },
+  {
+    count: 14,
+    title: "Product approvals",
+    desc: "New listings awaiting moderation",
+    cta: "Review products",
+    href: "/admindashboard/MARKETPLACE/products",
+    tone: "green",
+  },
+  {
+    count: 6,
+    title: "Supplier applications",
+    desc: "Stores requesting to join",
+    cta: "Review suppliers",
+    href: "/admindashboard/supplier/approvals",
+    tone: "orange",
+  },
+  {
+    count: 9,
+    title: "Withdrawal requests",
+    desc: "Affiliate payouts to process",
+    cta: "Process payouts",
+    href: "/admindashboard/finance/withdrawals",
+    tone: "teal",
+  },
+  {
+    count: 8,
+    title: "Flagged reviews",
+    desc: "Reported by customers",
+    cta: "Moderate reviews",
+    href: "/admindashboard/MARKETPLACE/reviews",
+    tone: "gray",
+  },
 ] as const;
 
 export default function PendingActions() {

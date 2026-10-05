@@ -144,7 +144,7 @@ const groups: Group[] = [
       { label: "Referral", href: `${base}/settings/Referral`, icon: UserPlus },
       { label: "Bonus", href: `${base}/settings/bonus`, icon: Award },
       { label: "Payment", href: `${base}/settings/Payment`, icon: CreditCard },
-      { label: "General Settings", href: `${base}/settings/general`, icon: Settings },
+      { label: "General Settings", href: `${base}/settings/General`, icon: Settings },
     ],
   },
 ];
